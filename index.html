@@ -5,52 +5,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Raz Exam Hub</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e8f0ff);
+      color: #1e293b;
     }
 
     header {
-      background-color: #1e293b;
+      background: url('https://images.unsplash.com/photo-1581093458791-9e9ef231ef5d?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
       color: white;
-      padding: 20px;
+      padding: 60px 20px;
       text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      margin: 0;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin-top: 10px;
     }
 
     nav {
       background-color: #334155;
       display: flex;
       justify-content: center;
-      gap: 30px;
-      padding: 15px;
+      gap: 40px;
+      padding: 18px 10px;
     }
 
     nav a {
       color: white;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
     }
 
     nav a:hover {
-      text-decoration: underline;
+      color: #93c5fd;
     }
 
     main {
-      padding: 40px;
-      text-align: center;
+      padding: 60px 20px;
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    main h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    main p {
+      font-size: 1.1rem;
+      line-height: 1.8;
     }
 
     footer {
       background-color: #1e293b;
       color: white;
       text-align: center;
-      padding: 15px;
-      position: relative;
-      bottom: 0;
-      width: 100%;
+      padding: 20px;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -62,15 +88,14 @@
   </header>
 
   <nav>
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="contact.html">Contact</a>
-</nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 
   <main>
     <h2>Welcome to Raz Exam Hub</h2>
-    <p>We are an independent test center offering secure and professional exam delivery for leading international exams.
-</p>
+    <p>We are an independent test center offering secure and professional exam delivery for leading international exams.</p>
   </main>
 
   <footer>
@@ -79,3 +104,4 @@
 
 </body>
 </html>
+
