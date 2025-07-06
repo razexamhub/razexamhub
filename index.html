@@ -21,6 +21,12 @@
       min-height: 100vh;
     }
 
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
     header {
       position: relative;
       height: 300px;
@@ -45,6 +51,11 @@
       padding-top: 100px;
     }
 
+    .header-content a {
+      text-decoration: none;
+      color: white;
+    }
+
     .header-content h1 {
       margin: 0;
       font-size: 2.5rem;
@@ -53,11 +64,6 @@
     .header-content p {
       margin: 10px 0 0;
       font-size: 1.2rem;
-    }
-
-    .header-content a {
-      text-decoration: none;
-      color: white;
     }
 
     nav {
@@ -110,32 +116,47 @@
   </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <a href="index.html">
+          <h1>Raz Exam Hub</h1>
+          <p>Your Trusted Exam Delivery Partner</p>
+        </a>
+      </div>
+    </header>
 
-<header>
-  <div class="header-content">
-    <a href="index.html">
-      <h1>Raz Exam Hub</h1>
-      <p>Your Trusted Exam Delivery Partner</p>
-    </a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <main>
+      <h2>Welcome to Raz Exam Hub</h2>
+      <p>We are an independent test center offering secure and professional exam delivery for leading international exams.</p>
+    </main>
+
+    <footer>
+      &copy; 2025 Raz Exam Hub. All rights reserved.
+    </footer>
   </div>
-</header>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="contact.html">Contact</a>
-</nav>
-
-<main>
-  <h2>Welcome to Raz Exam Hub</h2>
-  <p>We are an independent test center offering secure and professional exam delivery for leading international exams.</p>
-</main>
-
-<footer>
-  &copy; 2025 Raz Exam Hub. All rights reserved.
-</footer>
-
+  <!--Start of Tawk.to Script-->
+  <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/686a07aabe8a1b1910b84acc/1ivf2rtdf';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
+  <!--End of Tawk.to Script-->
 </body>
 </html>
+
 
 
