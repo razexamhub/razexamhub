@@ -7,8 +7,9 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
-
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -18,20 +19,17 @@
       flex-direction: column;
       min-height: 100vh;
     }
-
     .container {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
-
     header {
       position: relative;
       height: 300px;
       background: url('https://raw.githubusercontent.com/razexamhub/razexamhub/main/WhatsApp%20Image%202025-07-05%20at%2023.14.30_803dc3c5.jpg') center/cover no-repeat;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
     header::after {
       content: "";
       position: absolute;
@@ -40,7 +38,6 @@
       height: 100%;
       background-color: rgba(0,0,0,0.5);
     }
-
     .header-content {
       position: relative;
       z-index: 1;
@@ -48,42 +45,33 @@
       text-align: center;
       padding-top: 100px;
     }
-
     .header-content a {
       text-decoration: none;
       color: white;
     }
-
     .header-content h1 {
       margin: 0;
       font-size: 2.5rem;
     }
-
     .header-content p {
       margin: 10px 0 0;
       font-size: 1.2rem;
     }
-
     nav {
       background-color: #334155;
       display: flex;
       justify-content: center;
-      gap: 40px;
-      padding: 18px 10px;
+      gap: 30px;
+      padding: 15px;
     }
-
     nav a {
       color: white;
       text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: color 0.3s ease;
+      font-weight: bold;
     }
-
     nav a:hover {
-      color: #93c5fd;
+      text-decoration: underline;
     }
-
     main {
       flex: 1;
       padding: 60px 20px;
@@ -93,17 +81,6 @@
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.05);
     }
-
-    main h2 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-
-    main p {
-      font-size: 1.1rem;
-      line-height: 1.8;
-    }
-
     footer {
       background-color: #1e293b;
       color: white;
@@ -133,15 +110,13 @@
     <main>
       <h2>About Raz Exam Hub – Your Trusted Exam Center</h2>
       <p>Raz Exam Hub is an independent, secure testing facility based in Kochi, Kerala.</p>
-      <p>We are committed to providing a professional and reliable environment for candidates taking internationally recognized certification exams. As a potential Prometric-authorized test center, our focus is on delivering computer-based testing solutions that meet global standards of security, integrity, and convenience.</p>
-      <p>Our facility is designed to support exams across domains such as finance, healthcare, IT, and language proficiency, including exams like CMA (USA), GRE, and others.</p>
-      <p>We aim to create a smooth, stress-free testing experience — ensuring every candidate can focus fully on their exam in a quiet and well-managed space.</p>
+      <p>We are committed to providing a professional and reliable environment for candidates taking internationally recognized certification exams.</p>
     </main>
 
     <footer>
       &copy; 2025 Raz Exam Hub. All rights reserved.
     </footer>
   </div>
-
 </body>
 </html>
+
