@@ -107,6 +107,19 @@
       border-radius: 4px;
     }
 
+    main form input,
+    main form textarea {
+      background-color: #f9fafb;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    main form input:focus,
+    main form textarea:focus {
+      border: 1px solid #3b82f6;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
     button {
       background-color: #1e293b;
       color: white;
@@ -114,10 +127,13 @@
       padding: 10px;
       cursor: pointer;
       border-radius: 4px;
+      transition: transform 0.2s ease, filter 0.2s ease;
     }
 
     button:hover {
       background-color: #334155;
+      transform: scale(1.03);
+      filter: brightness(1.1);
     }
 
     footer {
@@ -128,7 +144,7 @@
       font-size: 0.9rem;
     }
   </style>
-<script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div class="container">
@@ -151,13 +167,11 @@
       <h2>Contact Us</h2>
       <p>If you have any questions or want to get in touch, please fill out the form below:</p>
       <form action="https://formspree.io/f/xanjzevl" method="POST">
-  <input type="hidden" name="_next" value="https://razexamhub.in/thank-you.html" />
-  <input type="text" name="name" placeholder="Your Name" required />
-  <input type="email" name="email" placeholder="Your Email" required />
-  <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
-  <button type="submit">Send Message</button>
-</form>
-
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
     </main>
 
     <footer>
@@ -178,11 +192,11 @@
     })();
   </script>
   <!--End of Tawk.to Script-->
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
-  });
-</script>
 
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
 </body>
 </html>
