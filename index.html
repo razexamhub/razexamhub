@@ -161,6 +161,44 @@
       animation-delay: 0.6s;
     }
 
+    #nexi-chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      cursor: pointer;
+    }
+
+    #nexi-chat-button img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+
+    #nexi-chat-button img:hover {
+      transform: scale(1.05);
+    }
+
+    .chat-bubble {
+      display: none;
+      background: #1e40af;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      animation: fadeSlide 0.6s ease forwards;
+      transform: translateY(10px);
+      opacity: 0;
+      animation-delay: 0.8s;
+      position: fixed;
+      bottom: 100px;
+      right: 90px;
+      z-index: 9998;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
     footer {
       background-color: #1e293b;
       color: white;
@@ -179,42 +217,6 @@
         opacity: 1;
         transform: translateY(0);
       }
-    }
-
-    /* Nexi Chat Widget Styling */
-    #nexi-chat-container {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      z-index: 9999;
-    }
-
-    #nexi-chat-container img {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transition: transform 0.2s ease;
-    }
-
-    #nexi-chat-container img:hover {
-      transform: scale(1.05);
-    }
-
-    .chat-bubble {
-      background: #1e40af;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 0.95rem;
-      animation: fadeSlide 0.6s ease forwards;
-      transform: translateY(10px);
-      opacity: 0;
-      animation-delay: 0.8s;
     }
   </style>
 </head>
@@ -282,13 +284,18 @@
     </footer>
   </div>
 
-  <!-- Nexi Chat Custom Button -->
-  <div id="nexi-chat-container" onclick="Tawk_API.maximize()">
-    <div class="chat-bubble">Need help?</div>
-    <img src="images/nexi.png" alt="Chat with Nexi" />
+  <!-- Chat Bubble -->
+  <div class="chat-bubble">💬 Need help?</div>
+
+  <!-- Nexi Avatar Button -->
+  <div id="nexi-chat-button" onclick="Tawk_API.maximize()">
+    <img src="images/nexi.png" alt="Chat with Nexi">
   </div>
 
-  <!-- Tawk.to Live Chat Script -->
+  <!-- Optional Sound -->
+  <audio id="nexi-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6bfa97ec3d.mp3?filename=pop-94319.mp3" preload="auto"></audio>
+
+  <!-- Tawk.to Script -->
   <script type="text/javascript">
     var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
     (function(){
@@ -300,10 +307,36 @@
       s0.parentNode.insertBefore(s1, s0);
     })();
 
-    Tawk_API = Tawk_API || {};
     Tawk_API.onLoad = function() {
-      Tawk_API.hideWidget(); // Hide default button
+      Tawk_API.hideWidget();
     };
+  </script>
+
+  <!-- Bubble Show Once + Auto Hide -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const bubble = document.querySelector(".chat-bubble");
+      const sound = document.getElementById("nexi-sound");
+
+      if (!sessionStorage.getItem("nexiBubbleShown")) {
+        bubble.style.display = "block";
+        setTimeout(() => {
+          bubble.style.opacity = "1";
+          bubble.style.transform = "translateY(0)";
+          sound.play();
+        }, 500);
+
+        setTimeout(() => {
+          bubble.style.opacity = "0";
+          bubble.style.transform = "translateY(10px)";
+          setTimeout(() => {
+            bubble.style.display = "none";
+          }, 500);
+        }, 8500); // auto hide after 8.5 seconds
+
+        sessionStorage.setItem("nexiBubbleShown", "true");
+      }
+    });
   </script>
 </body>
 </html>
