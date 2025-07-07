@@ -128,6 +128,7 @@
       font-size: 0.9rem;
     }
   </style>
+<script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div class="container">
@@ -147,15 +148,49 @@
     </nav>
 
     <main>
-      <h2>Contact Us</h2>
-      <p>If you have any questions or want to get in touch, please fill out the form below:</p>
-      <form action="https://formspree.io/f/xanjzevl" method="POST">
-        <input type="text" name="name" placeholder="Your Name" required />
-        <input type="email" name="email" placeholder="Your Email" required />
-        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
-        <button type="submit">Send Message</button>
-      </form>
-    </main>
+  <h2 style="text-align:center; font-size:2rem; margin-bottom:10px;">Get in Touch</h2>
+  <p style="text-align:center; font-size:1.1rem; margin-bottom:30px;">
+    Have a question about our exam services or looking to partner with us? Reach out anytime — we’re here to help.
+  </p>
+
+  <!-- Contact Info with Icons -->
+  <div style="background:#f1f5f9; padding:20px; border-radius:10px; text-align:left; display:flex; flex-direction:column; gap:15px;">
+    <p style="margin:0; display:flex; align-items:center; gap:10px;">
+      <i data-lucide="mail" style="width:20px; height:20px;"></i>
+      <strong>Email:</strong> <a href="mailto:admin@razexamhub.in" style="color:#1e40af;">admin@razexamhub.in</a>
+    </p>
+    <p style="margin:0; display:flex; align-items:center; gap:10px;">
+      <i data-lucide="phone" style="width:20px; height:20px;"></i>
+      <strong>Phone:</strong> +91 98765 43210
+    </p>
+    <p style="margin:0; display:flex; align-items:center; gap:10px;">
+      <i data-lucide="map-pin" style="width:20px; height:20px;"></i>
+      <strong>Address:</strong> [Add your location here]
+    </p>
+  </div>
+
+  <!-- Contact Form -->
+  <form action="https://formspree.io/f/xanjzevl" method="POST" style="display:flex; flex-direction:column; gap:15px; margin-top:40px;">
+    <input type="text" name="name" placeholder="Your Name" required />
+    <input type="email" name="email" placeholder="Your Email" required />
+    <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+
+  <!-- Google Map -->
+  <div style="margin-top:50px;">
+    <h3 style="text-align:center;">Our Location</h3>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=..."
+      width="100%"
+      height="300"
+      style="border:0; border-radius:8px;"
+      allowfullscreen=""
+      loading="lazy">
+    </iframe>
+  </div>
+</main>
+
 
     <footer>
       &copy; 2025 Raz Exam Hub. All rights reserved.
@@ -175,5 +210,11 @@
     })();
   </script>
   <!--End of Tawk.to Script-->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+  });
+</script>
+
 </body>
 </html>
