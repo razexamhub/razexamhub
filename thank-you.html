@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Thank You - Raz Exam Hub</title>
+  <title>Contact - Raz Exam Hub</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -86,23 +86,54 @@
 
     main {
       flex: 1;
-      padding: 80px 20px;
-      max-width: 700px;
+      padding: 60px 20px;
+      max-width: 600px;
       margin: auto;
       background: white;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-      text-align: center;
     }
 
-    main h2 {
-      font-size: 2.2rem;
-      margin-bottom: 20px;
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
-    main p {
-      font-size: 1.2rem;
-      color: #334155;
+    input, textarea {
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    main form input,
+    main form textarea {
+      background-color: #f9fafb;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    main form input:focus,
+    main form textarea:focus {
+      border: 1px solid #3b82f6;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    button {
+      background-color: #1e293b;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #334155;
+      transform: scale(1.03);
+      filter: brightness(1.1);
     }
 
     footer {
@@ -113,6 +144,7 @@
       font-size: 0.9rem;
     }
   </style>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div class="container">
@@ -132,13 +164,40 @@
     </nav>
 
     <main>
-      <h2>Thank You!</h2>
-      <p>Your message has been sent successfully. We'll get back to you as soon as possible.</p>
+      <h2>Contact Us</h2>
+      <p>If you have any questions or want to get in touch, please fill out the form below:</p>
+      <form action="https://formspree.io/f/xanjzevl" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
     </main>
 
     <footer>
       &copy; 2025 Raz Exam Hub. All rights reserved.
     </footer>
   </div>
+
+  <!--Start of Tawk.to Script-->
+  <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/686a07aabe8a1b1910b84acc/1ivf2rtdf';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
+  <!--End of Tawk.to Script-->
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
 </body>
 </html>
+
