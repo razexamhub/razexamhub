@@ -84,38 +84,42 @@
       text-decoration: underline;
     }
 
-   /* Fade-in for main section */
-main {
-  animation: fadeIn 0.8s ease forwards;
-  opacity: 0;
-}
+    /* Fade-in for main section */
+    main {
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
+      padding: 60px 20px;
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
 
-/* Slide-up for form inputs */
-form input,
-form textarea,
-form button {
-  opacity: 0;
-  transform: translateY(15px);
-  animation: slideUp 0.6s ease forwards;
-}
+    /* Slide-up for form inputs */
+    form input,
+    form textarea,
+    form button {
+      opacity: 0;
+      transform: translateY(15px);
+      animation: slideUp 0.6s ease forwards;
+    }
 
-/* Delays for each form element */
-form input:nth-child(1) { animation-delay: 0.3s; }
-form input:nth-child(2) { animation-delay: 0.45s; }
-form textarea { animation-delay: 0.6s; }
-form button { animation-delay: 0.75s; }
+    form input:nth-child(1) { animation-delay: 0.3s; }
+    form input:nth-child(2) { animation-delay: 0.45s; }
+    form textarea { animation-delay: 0.6s; }
+    form button { animation-delay: 0.75s; }
 
-/* Keyframes */
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
 
-@keyframes slideUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     form {
       display: flex;
@@ -128,16 +132,11 @@ form button { animation-delay: 0.75s; }
       font-size: 1em;
       border: 1px solid #ccc;
       border-radius: 4px;
-    }
-
-    main form input,
-    main form textarea {
       background-color: #f9fafb;
       transition: border 0.2s, box-shadow 0.2s;
     }
 
-    main form input:focus,
-    main form textarea:focus {
+    input:focus, textarea:focus {
       border: 1px solid #3b82f6;
       outline: none;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
@@ -165,6 +164,7 @@ form button { animation-delay: 0.75s; }
       text-align: center;
       padding: 20px;
       font-size: 0.9rem;
+      margin-top: auto;
     }
   </style>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -188,7 +188,7 @@ form button { animation-delay: 0.75s; }
 
     <main>
       <h2>Contact Us</h2>
-      <p>If you have any questions or want to get in touch, please fill out the form below:</p>
+      <p>We're always happy to hear from you! Whether you have a question, feedback, or you're simply looking to connect, just fill out the form below and we’ll get back to you shortly.</p>
       <form action="https://formspree.io/f/xanjzevl" method="POST">
         <input type="text" name="name" placeholder="Your Name" required />
         <input type="email" name="email" placeholder="Your Email" required />
@@ -223,3 +223,4 @@ form button { animation-delay: 0.75s; }
   </script>
 </body>
 </html>
+
