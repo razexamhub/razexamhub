@@ -7,10 +7,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -20,29 +17,23 @@
       flex-direction: column;
       min-height: 100vh;
     }
-
     .container {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
-
     header {
       position: relative;
       height: 300px;
       background: url('https://raw.githubusercontent.com/razexamhub/razexamhub/main/WhatsApp%20Image%202025-07-05%20at%2023.14.30_803dc3c5.jpg') center/cover no-repeat;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
     header::after {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       background-color: rgba(0,0,0,0.5);
     }
-
     .header-content {
       position: relative;
       z-index: 1;
@@ -50,124 +41,122 @@
       text-align: center;
       padding-top: 100px;
     }
-
     .header-content a {
       text-decoration: none;
       color: white;
     }
-
-    .header-content h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-
-    .header-content p {
-      margin: 10px 0 0;
-      font-size: 1.2rem;
-    }
-
+    .header-content h1 { margin: 0; font-size: 2.5rem; }
+    .header-content p { margin: 10px 0 0; font-size: 1.2rem; }
     nav {
       background-color: #334155;
       display: flex;
       justify-content: center;
-      gap: 30px;
-      padding: 15px;
+      gap: 40px;
+      padding: 18px 10px;
     }
-
     nav a {
       color: white;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
     }
-
     nav a:hover {
-      text-decoration: underline;
+      color: #93c5fd;
     }
-
-    /* Fade-in for main section */
     main {
-      animation: fadeIn 0.8s ease forwards;
-      opacity: 0;
+      flex: 1;
       padding: 60px 20px;
-      max-width: 600px;
+      max-width: 900px;
       margin: auto;
       background: white;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.05);
     }
-
-    /* Slide-up for form inputs */
-    form input,
-    form textarea,
-    form button {
-      opacity: 0;
-      transform: translateY(15px);
-      animation: slideUp 0.6s ease forwards;
+    main h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
     }
-
-    form input:nth-child(1) { animation-delay: 0.3s; }
-    form input:nth-child(2) { animation-delay: 0.45s; }
-    form textarea { animation-delay: 0.6s; }
-    form button { animation-delay: 0.75s; }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
+    main p, main label {
+      font-size: 1.1rem;
+      line-height: 1.8;
     }
-
-    @keyframes slideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     form {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 20px;
+      margin-top: 20px;
     }
-
     input, textarea {
-      padding: 10px;
-      font-size: 1em;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background-color: #f9fafb;
-      transition: border 0.2s, box-shadow 0.2s;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      resize: vertical;
     }
-
-    input:focus, textarea:focus {
-      border: 1px solid #3b82f6;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-
     button {
-      background-color: #1e293b;
+      padding: 12px;
+      font-size: 1rem;
+      background-color: #1e40af;
       color: white;
       border: none;
-      padding: 10px;
+      border-radius: 6px;
+      font-weight: 600;
       cursor: pointer;
-      border-radius: 4px;
-      transition: transform 0.2s ease, filter 0.2s ease;
     }
-
     button:hover {
-      background-color: #334155;
-      transform: scale(1.03);
-      filter: brightness(1.1);
+      background-color: #1e3a8a;
     }
-
     footer {
       background-color: #1e293b;
       color: white;
       text-align: center;
       padding: 20px;
       font-size: 0.9rem;
-      margin-top: auto;
+    }
+
+    /* Nexi Chat */
+    #nexi-chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      cursor: pointer;
+    }
+    #nexi-chat-button img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+    #nexi-chat-button img:hover {
+      transform: scale(1.05);
+    }
+
+    .speech-bubble {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 12px 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-weight: 500;
+      font-size: 0.95rem;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeBubble 0.5s ease forwards;
+    }
+    @keyframes fadeBubble {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
-  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div class="container">
@@ -188,11 +177,18 @@
 
     <main>
       <h2>Contact Us</h2>
-      <p>We're always happy to hear from you! Whether you have a question, feedback, or you're simply looking to connect, just fill out the form below and we’ll get back to you shortly.</p>
-      <form action="https://formspree.io/f/xanjzevl" method="POST">
-        <input type="text" name="name" placeholder="Your Name" required />
-        <input type="email" name="email" placeholder="Your Email" required />
-        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+      <p>If you have questions about our exam services or want to learn more about our upcoming center, feel free to reach out using the form below.</p>
+
+      <form>
+        <label for="name">Your Name</label>
+        <input type="text" id="name" placeholder="Enter your name" required>
+
+        <label for="email">Your Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" rows="5" placeholder="Write your message here" required></textarea>
+
         <button type="submit">Send Message</button>
       </form>
     </main>
@@ -202,25 +198,48 @@
     </footer>
   </div>
 
-  <!--Start of Tawk.to Script-->
+  <!-- Tawk.to Widget -->
   <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-      s1.async=true;
-      s1.src='https://embed.tawk.to/686a07aabe8a1b1910b84acc/1ivf2rtdf';
-      s1.charset='UTF-8';
-      s1.setAttribute('crossorigin','*');
-      s0.parentNode.insertBefore(s1,s0);
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function() {
+      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/686a07aabe8a1b1910b84acc/1ivf2rtdf';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode.insertBefore(s1, s0);
     })();
   </script>
-  <!--End of Tawk.to Script-->
 
+  <!-- Hide Default Chat Icon -->
+  <script>
+    Tawk_API = Tawk_API || {};
+    Tawk_API.onLoad = function() {
+      Tawk_API.hideWidget();
+    };
+  </script>
+
+  <!-- Nexi Button -->
+  <div id="nexi-chat-button" onclick="Tawk_API.maximize()">
+    <img src="images/nexi.png" alt="Chat with Nexi">
+  </div>
+
+  <!-- Nexi Audio & Bubble -->
+  <audio id="nexi-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b9a34fa74c.mp3?filename=notification-94504.mp3" preload="auto"></audio>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
+      if (!sessionStorage.getItem('nexiPopupShown')) {
+        const bubble = document.createElement('div');
+        bubble.className = 'speech-bubble';
+        bubble.textContent = 'Need help?';
+        document.body.appendChild(bubble);
+        document.getElementById('nexi-audio').play().catch(() => {});
+        setTimeout(() => bubble.remove(), 4000);
+        sessionStorage.setItem('nexiPopupShown', 'true');
+      }
     });
   </script>
 </body>
 </html>
+
 
