@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -17,25 +18,24 @@
       flex-direction: column;
       min-height: 100vh;
     }
-    .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
+
+    .container { flex: 1; display: flex; flex-direction: column; }
+
     header {
       position: relative;
       height: 300px;
       background: url('https://raw.githubusercontent.com/razexamhub/razexamhub/main/WhatsApp%20Image%202025-07-05%20at%2023.14.30_803dc3c5.jpg') center/cover no-repeat;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
+
     header::after {
       content: "";
       position: absolute;
       top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       background-color: rgba(0,0,0,0.5);
     }
+
     .header-content {
       position: relative;
       z-index: 1;
@@ -43,9 +43,21 @@
       text-align: center;
       padding-top: 100px;
     }
-    .header-content h1 { margin: 0; font-size: 2.5rem; }
-    .header-content p { margin: 10px 0 0; font-size: 1.2rem; }
-    .header-content a { text-decoration: none; color: white; }
+
+    .header-content a {
+      text-decoration: none;
+      color: white;
+    }
+
+    .header-content h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    .header-content p {
+      margin: 10px 0 0;
+      font-size: 1.2rem;
+    }
 
     nav {
       background-color: #334155;
@@ -54,6 +66,7 @@
       gap: 40px;
       padding: 18px 10px;
     }
+
     nav a {
       color: white;
       text-decoration: none;
@@ -61,6 +74,7 @@
       font-size: 1rem;
       transition: color 0.3s ease;
     }
+
     nav a:hover {
       color: #93c5fd;
     }
@@ -73,6 +87,29 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      opacity: 0;
+      animation: fadeIn 0.9s ease forwards;
+    }
+
+    main h2, main h3 {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeSlide 0.8s ease forwards;
+    }
+
+    main h2 { animation-delay: 0.2s; }
+    main h3 { animation-delay: 0.4s; }
+
+    main p, main ul {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeSlide 0.8s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    main h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
     }
 
     main h3 {
@@ -87,12 +124,47 @@
       line-height: 1.8;
     }
 
+    .goal-card {
+      margin-top: 40px;
+      padding: 20px;
+      background-color: #f1f5f9;
+      border-left: 5px solid #3b82f6;
+      border-radius: 8px;
+      animation: fadeSlide 1s ease forwards;
+      opacity: 0;
+      transform: translateY(10px);
+      animation-delay: 0.6s;
+    }
+
+    .goal-card h4 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+      color: #1e3a8a;
+    }
+
+    .goal-card p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
     footer {
       background-color: #1e293b;
       color: white;
       text-align: center;
       padding: 20px;
       font-size: 0.9rem;
+      margin-top: auto;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeSlide {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -115,9 +187,9 @@
 
     <main>
       <h2>About Raz Exam Hub – Your Trusted Exam Center</h2>
-      <p>Raz Exam Hub is an independent, secure testing facility under development. We are committed to providing a professional and reliable environment for candidates taking internationally recognized certification exams.</p>
-      <p>We are currently working towards becoming an official Prometric-authorized test center. This will allow us to deliver a wide range of exams including finance, healthcare, IT, and language proficiency certifications such as CMA (USA), GRE, and more.</p>
-      <p>Our facility is being designed with modern infrastructure and strict compliance measures to ensure candidates experience a smooth, secure, and distraction-free exam environment. Our focus is on convenience, accessibility, and strict adherence to global testing protocols.</p>
+      <p>Raz Exam Hub is an independent, secure testing facility initiative. We are committed to building a professional and reliable environment for candidates taking internationally recognized certification exams.</p>
+      <p>Our goal is to become an official Prometric-authorized test center. This would enable us to deliver a wide range of exams including finance, healthcare, IT, and language proficiency certifications such as CMA (USA), GRE, and more.</p>
+      <p>We are focused on creating an infrastructure that aligns with global testing standards to ensure candidates experience a smooth, secure, and distraction-free exam environment.</p>
 
       <h3>What We Offer</h3>
       <ul>
@@ -128,8 +200,13 @@
 
       <h3>Looking Ahead</h3>
       <p>
-        As we work toward becoming a Prometric-authorized center, our mission remains clear: to serve exam candidates with professionalism, integrity, and excellence.
+        Our mission remains clear: to serve exam candidates with professionalism, integrity, and excellence.
       </p>
+
+      <div class="goal-card">
+        <h4>🛠 Planned Development</h4>
+        <p>We are currently in the planning phase of building our exam center. The project will move forward once we receive official approval from Prometric. This reflects our commitment to becoming a recognized and professional testing destination.</p>
+      </div>
     </main>
 
     <footer>
@@ -152,6 +229,7 @@
   <!--End of Tawk.to Script-->
 </body>
 </html>
+
 
 
 
