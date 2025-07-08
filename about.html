@@ -305,6 +305,45 @@
     topBtn.style.display = window.scrollY > 200 ? "block" : "none";
   });
 </script>
+  <script>
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const screenWidth = window.innerWidth;
+
+  if (screenWidth < 768) {
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const deltaX = touchEndX - touchStartX;
+
+      if (Math.abs(deltaX) > 80) {
+        document.body.style.transition = "opacity 0.4s ease";
+        document.body.style.opacity = "0";
+
+        setTimeout(() => {
+          const current = window.location.pathname;
+          if (deltaX < 0) {
+            // Swipe left
+            if (current.includes("index")) window.location.href = "about.html";
+            else if (current.includes("about")) window.location.href = "contact.html";
+          } else {
+            // Swipe right
+            if (current.includes("contact")) window.location.href = "about.html";
+            else if (current.includes("about")) window.location.href = "index.html";
+          }
+        }, 400);
+      }
+    }
+  }
+</script>
+
 </body>
 </html>
 
