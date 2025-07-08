@@ -125,7 +125,7 @@
     }
 
     .status-card {
-      margin-top: 40px;
+      margin-top: 10px;
       padding: 20px;
       background-color: #dbeafe;
       border-left: 5px solid #3b82f6;
@@ -134,12 +134,6 @@
       opacity: 0;
       transform: translateY(10px);
       animation-delay: 0.6s;
-    }
-
-    .status-card h4 {
-      margin: 0 0 10px;
-      font-size: 1.2rem;
-      color: #1e3a8a;
     }
 
     .status-card p {
@@ -240,8 +234,8 @@
       <h3>Looking Ahead</h3>
       <p>Our mission remains clear: to serve exam candidates with professionalism, integrity, and excellence.</p>
 
+      <h4>Status</h4>
       <div class="status-card">
-        <h4>Status</h4>
         <p>🛠 We're currently working to gain Prometric's approval. Construction of the facility will begin once formal authorization is granted.</p>
       </div>
     </main>
@@ -264,19 +258,14 @@
 
   <!-- Tawk.to Script -->
   <script type="text/javascript">
-    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    var Tawk_API = Tawk_API || {};
     (function(){
-      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-      s1.async = true;
+      var s1 = document.createElement("script");
       s1.src = 'https://embed.tawk.to/686a07aabe8a1b1910b84acc/1ivf2rtdf';
-      s1.charset = 'UTF-8';
-      s1.setAttribute('crossorigin', '*');
-      s0.parentNode.insertBefore(s1, s0);
+      s1.async = true;
+      s1.onload = function() { Tawk_API.hideWidget(); };
+      document.head.appendChild(s1);
     })();
-
-    Tawk_API.onLoad = function() {
-      Tawk_API.hideWidget();
-    };
   </script>
 
   <!-- Bubble Show Once + Auto Hide -->
@@ -307,5 +296,6 @@
   </script>
 </body>
 </html>
+
 
 
