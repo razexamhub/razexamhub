@@ -161,6 +161,27 @@
       animation-delay: 0.6s;
     }
 
+    footer {
+      background-color: #1e293b;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeSlide {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Nexi Avatar */
     #nexi-chat-button {
       position: fixed;
       bottom: 20px;
@@ -199,24 +220,12 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
 
-    footer {
-      background-color: #1e293b;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9rem;
-      margin-top: auto;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeSlide {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* Hide Tawk widget immediately */
+    #tawkchat-container {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
   </style>
 </head>
@@ -284,15 +293,11 @@
     </footer>
   </div>
 
-  <!-- Chat Bubble -->
+  <!-- Nexi: Bubble + Sound + Avatar -->
   <div class="chat-bubble">💬 Need help?</div>
-
-  <!-- Nexi Avatar Button -->
   <div id="nexi-chat-button" onclick="Tawk_API.maximize()">
     <img src="images/nexi.png" alt="Chat with Nexi">
   </div>
-
-  <!-- Optional Sound -->
   <audio id="nexi-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6bfa97ec3d.mp3?filename=pop-94319.mp3" preload="auto"></audio>
 
   <!-- Tawk.to Script -->
@@ -307,12 +312,17 @@
       s0.parentNode.insertBefore(s1, s0);
     })();
 
-    Tawk_API.onLoad = function() {
-      Tawk_API.hideWidget();
+    Tawk_API.onLoad = function () {
+      if (Tawk_API && Tawk_API.hideWidget) {
+        Tawk_API.hideWidget();
+      }
+      const style = document.createElement('style');
+      style.innerHTML = "#tawkchat-container { display: none !important; opacity: 0 !important; }";
+      document.head.appendChild(style);
     };
   </script>
 
-  <!-- Bubble Show Once + Auto Hide -->
+  <!-- Nexi Bubble Logic -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const bubble = document.querySelector(".chat-bubble");
@@ -332,7 +342,7 @@
           setTimeout(() => {
             bubble.style.display = "none";
           }, 500);
-        }, 8500); // auto hide after 8.5 seconds
+        }, 8500);
 
         sessionStorage.setItem("nexiBubbleShown", "true");
       }
