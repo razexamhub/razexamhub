@@ -64,6 +64,7 @@
     nav a:hover {
       color: #93c5fd;
     }
+
     main {
       flex: 1;
       padding: 60px 20px;
@@ -72,7 +73,19 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      opacity: 0;
+      animation: fadeSlide 0.8s ease forwards;
     }
+
+    main h2, main p, main form {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeSlide 0.8s ease forwards;
+    }
+    main h2 { animation-delay: 0.2s; }
+    main p  { animation-delay: 0.4s; }
+    main form { animation-delay: 0.6s; }
+
     main h2 {
       font-size: 2rem;
       margin-bottom: 20px;
@@ -107,6 +120,7 @@
     button:hover {
       background-color: #1e3a8a;
     }
+
     footer {
       background-color: #1e293b;
       color: white;
@@ -123,6 +137,7 @@
       z-index: 9999;
       cursor: pointer;
     }
+
     #nexi-chat-button img {
       width: 70px;
       height: 70px;
@@ -130,6 +145,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       transition: transform 0.2s ease;
     }
+
     #nexi-chat-button img:hover {
       transform: scale(1.05);
     }
@@ -148,9 +164,10 @@
       z-index: 9999;
       opacity: 0;
       transform: translateY(10px);
-      animation: fadeBubble 0.5s ease forwards;
+      animation: fadeSlide 0.6s ease forwards;
     }
-    @keyframes fadeBubble {
+
+    @keyframes fadeSlide {
       to {
         opacity: 1;
         transform: translateY(0);
@@ -175,29 +192,23 @@
       <a href="contact.html">Contact</a>
     </nav>
 
-<main>
-  <h2 style="opacity:0; transform:translateY(10px); animation:fadeSlide 0.8s ease forwards; animation-delay:0.2s;">
-    Contact Us
-  </h2>
+    <main>
+      <h2>Contact Us</h2>
+      <p>If you have questions about our exam services or want to learn more about our upcoming center, feel free to reach out using the form below.</p>
 
-  <p style="opacity:0; transform:translateY(10px); animation:fadeSlide 0.8s ease forwards; animation-delay:0.4s;">
-    If you have questions about our exam services or want to learn more about our upcoming center, feel free to reach out using the form below.
-  </p>
+      <form>
+        <label for="name">Your Name</label>
+        <input type="text" id="name" placeholder="Enter your name" required>
 
-  <form style="opacity:0; transform:translateY(10px); animation:fadeSlide 0.8s ease forwards; animation-delay:0.6s;">
-    <label for="name">Your Name</label>
-    <input type="text" id="name" placeholder="Enter your name" required>
+        <label for="email">Your Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
 
-    <label for="email">Your Email</label>
-    <input type="email" id="email" placeholder="Enter your email" required>
+        <label for="message">Message</label>
+        <textarea id="message" rows="5" placeholder="Write your message here" required></textarea>
 
-    <label for="message">Message</label>
-    <textarea id="message" rows="5" placeholder="Write your message here" required></textarea>
-
-    <button type="submit">Send Message</button>
-  </form>
-</main>
-
+        <button type="submit">Send Message</button>
+      </form>
+    </main>
 
     <footer>
       &copy; 2025 Raz Exam Hub. All rights reserved.
@@ -215,22 +226,19 @@
       s1.setAttribute('crossorigin', '*');
       s0.parentNode.insertBefore(s1, s0);
     })();
-  </script>
 
-  <!-- Hide Default Chat Icon -->
-  <script>
     Tawk_API = Tawk_API || {};
-    Tawk_API.onLoad = function() {
+    Tawk_API.onLoad = function () {
       Tawk_API.hideWidget();
     };
   </script>
 
-  <!-- Nexi Button -->
+  <!-- Nexi Chat Button -->
   <div id="nexi-chat-button" onclick="Tawk_API.maximize()">
     <img src="images/nexi.png" alt="Chat with Nexi">
   </div>
 
-  <!-- Nexi Audio & Bubble -->
+  <!-- Nexi Sound and Bubble -->
   <audio id="nexi-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b9a34fa74c.mp3?filename=notification-94504.mp3" preload="auto"></audio>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
@@ -247,5 +255,6 @@
   </script>
 </body>
 </html>
+
 
 
