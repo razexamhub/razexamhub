@@ -384,20 +384,28 @@
 
         setTimeout(() => {
           const current = window.location.pathname;
+
           if (deltaX < 0) {
-            // Swipe left
-            if (current.includes("index")) window.location.href = "about.html";
-            else if (current.includes("about")) window.location.href = "contact.html";
+            // Swipe Left
+            if (current.includes("index")) {
+              window.location.href = "about.html";
+            } else if (current.includes("about")) {
+              window.location.href = "contact.html";
+            } // Prevent left swipe from contact.html (no page after)
           } else {
-            // Swipe right
-            if (current.includes("contact")) window.location.href = "about.html";
-            else if (current.includes("about")) window.location.href = "index.html";
+            // Swipe Right
+            if (current.includes("contact")) {
+              window.location.href = "about.html";
+            } else if (current.includes("about")) {
+              window.location.href = "index.html";
+            } // Prevent right swipe from index.html (no page before)
           }
         }, 400);
       }
     }
   }
 </script>
+
 </body>
 </html>
 
