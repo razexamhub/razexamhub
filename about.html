@@ -294,6 +294,17 @@
       }
     });
   </script>
+  <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        style="position:fixed; bottom:80px; right:20px; padding:10px 14px; background:#1e40af; color:white; border:none; border-radius:6px; font-weight:600; display:none; z-index:9999;" 
+        id="scrollTopBtn">
+  ↑ Top
+</button>
+<script>
+  const topBtn = document.getElementById("scrollTopBtn");
+  window.addEventListener("scroll", () => {
+    topBtn.style.display = window.scrollY > 200 ? "block" : "none";
+  });
+</script>
 </body>
 </html>
 
