@@ -8,19 +8,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
-    body {
+    html, body {
       margin: 0;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to right, #f8f9fa, #e8f0ff);
       color: #1e293b;
+      height: 100%;
+    }
+    body.fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .container {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-    }
-    .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
     }
     header {
       position: relative;
@@ -73,18 +75,15 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-      opacity: 0;
-      animation: fadeSlide 0.8s ease forwards;
     }
-
-    main h2, main p, main form {
+    main h2, main p, form {
       opacity: 0;
       transform: translateY(10px);
       animation: fadeSlide 0.8s ease forwards;
     }
     main h2 { animation-delay: 0.2s; }
     main p  { animation-delay: 0.4s; }
-    main form { animation-delay: 0.6s; }
+    form    { animation-delay: 0.6s; }
 
     main h2 {
       font-size: 2rem;
@@ -137,7 +136,6 @@
       z-index: 9999;
       cursor: pointer;
     }
-
     #nexi-chat-button img {
       width: 70px;
       height: 70px;
@@ -145,7 +143,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       transition: transform 0.2s ease;
     }
-
     #nexi-chat-button img:hover {
       transform: scale(1.05);
     }
@@ -161,13 +158,20 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       font-weight: 500;
       font-size: 0.95rem;
-      z-index: 9999;
+      z-index: 9998;
       opacity: 0;
       transform: translateY(10px);
-      animation: fadeSlide 0.6s ease forwards;
+      animation: fadeBubble 0.5s ease forwards;
     }
 
     @keyframes fadeSlide {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeBubble {
       to {
         opacity: 1;
         transform: translateY(0);
@@ -195,7 +199,6 @@
     <main>
       <h2>Contact Us</h2>
       <p>If you have questions about our exam services or want to learn more about our upcoming center, feel free to reach out using the form below.</p>
-
       <form>
         <label for="name">Your Name</label>
         <input type="text" id="name" placeholder="Enter your name" required>
@@ -226,44 +229,61 @@
       s1.setAttribute('crossorigin', '*');
       s0.parentNode.insertBefore(s1, s0);
     })();
-
-    Tawk_API = Tawk_API || {};
-    Tawk_API.onLoad = function () {
+    Tawk_API.onLoad = function() {
       Tawk_API.hideWidget();
     };
   </script>
 
-  <!-- Nexi Chat Button -->
+  <!-- Nexi Bubble -->
+  <div class="speech-bubble" style="display: none;">Need help?</div>
+  <audio id="nexi-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b9a34fa74c.mp3?filename=notification-94504.mp3" preload="auto"></audio>
   <div id="nexi-chat-button" onclick="Tawk_API.maximize()">
     <img src="images/nexi.png" alt="Chat with Nexi">
   </div>
 
-  <!-- Nexi Sound and Bubble -->
-  <audio id="nexi-audio" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b9a34fa74c.mp3?filename=notification-94504.mp3" preload="auto"></audio>
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      if (!sessionStorage.getItem('nexiPopupShown')) {
-        const bubble = document.createElement('div');
-        bubble.className = 'speech-bubble';
-        bubble.textContent = 'Need help?';
-        document.body.appendChild(bubble);
-        document.getElementById('nexi-audio').play().catch(() => {});
-        setTimeout(() => bubble.remove(), 4000);
-        sessionStorage.setItem('nexiPopupShown', 'true');
+    document.addEventListener("DOMContentLoaded", function () {
+      const bubble = document.querySelector(".speech-bubble");
+      const sound = document.getElementById("nexi-audio");
+
+      if (!sessionStorage.getItem("nexiPopupShown")) {
+        bubble.style.display = "block";
+        setTimeout(() => {
+          bubble.style.opacity = "1";
+          bubble.style.transform = "translateY(0)";
+          sound.play().catch(() => {});
+        }, 300);
+        setTimeout(() => {
+          bubble.style.opacity = "0";
+          bubble.style.transform = "translateY(10px)";
+          setTimeout(() => bubble.style.display = "none", 500);
+        }, 5000);
+        sessionStorage.setItem("nexiPopupShown", "true");
       }
     });
   </script>
-  <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
-        style="position:fixed; bottom:80px; right:20px; padding:10px 14px; background:#1e40af; color:white; border:none; border-radius:6px; font-weight:600; display:none; z-index:9999;" 
-        id="scrollTopBtn">
-  ↑ Top
-</button>
-<script>
-  const topBtn = document.getElementById("scrollTopBtn");
-  window.addEventListener("scroll", () => {
-    topBtn.style.display = window.scrollY > 200 ? "block" : "none";
-  });
-</script>
+
+  <!-- Swipe Navigation Script -->
+  <script>
+    if (window.innerWidth < 768) {
+      let startX = 0, endX = 0;
+      document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+      document.addEventListener('touchend', e => {
+        endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        if (Math.abs(diff) > 50) {
+          document.body.classList.add('fade-out');
+          setTimeout(() => {
+            if (diff > 0) {
+              window.location.href = 'about.html';
+            } else {
+              window.location.href = 'index.html';
+            }
+          }, 300);
+        }
+      });
+    }
+  </script>
 </body>
 </html>
 
