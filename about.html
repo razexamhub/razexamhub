@@ -124,7 +124,7 @@
       line-height: 1.8;
     }
 
-    .goal-card {
+    .status-card {
       margin-top: 40px;
       padding: 20px;
       background-color: #dbeafe;
@@ -136,13 +136,13 @@
       animation-delay: 0.6s;
     }
 
-    .goal-card h4 {
+    .status-card h4 {
       margin: 0 0 10px;
       font-size: 1.2rem;
       color: #1e3a8a;
     }
 
-    .goal-card p {
+    .status-card p {
       margin: 0;
       line-height: 1.6;
     }
@@ -156,23 +156,7 @@
       margin-top: auto;
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeSlide {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Hide Tawk default button */
-    #tawkchat-container {
-      display: none !important;
-    }
-
-    /* Nexi Avatar Button */
+    /* Nexi Chat */
     #nexi-chat-button {
       position: fixed;
       bottom: 20px;
@@ -193,19 +177,33 @@
       transform: scale(1.05);
     }
 
-    /* Speech bubble */
-    #chat-bubble {
+    .chat-bubble {
+      display: none;
+      background: #1e40af;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      animation: fadeSlide 0.6s ease forwards;
+      transform: translateY(10px);
+      opacity: 0;
+      animation-delay: 0.8s;
       position: fixed;
       bottom: 100px;
       right: 90px;
-      background-color: #fef3c7;
-      color: #92400e;
-      padding: 10px 15px;
-      border-radius: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      font-size: 0.95rem;
-      display: none;
-      z-index: 9999;
+      z-index: 9998;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeSlide {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -242,9 +240,9 @@
       <h3>Looking Ahead</h3>
       <p>Our mission remains clear: to serve exam candidates with professionalism, integrity, and excellence.</p>
 
-      <div class="goal-card">
-        <h4>📌 Status</h4>
-        <p>We're currently working to gain Prometric's approval. Construction of the facility will begin once formal authorization is granted.</p>
+      <div class="status-card">
+        <h4>Status</h4>
+        <p>🛠 We're currently working to gain Prometric's approval. Construction of the facility will begin once formal authorization is granted.</p>
       </div>
     </main>
 
@@ -252,6 +250,17 @@
       &copy; 2025 Raz Exam Hub. All rights reserved.
     </footer>
   </div>
+
+  <!-- Chat Bubble -->
+  <div class="chat-bubble">💬 Need help?</div>
+
+  <!-- Nexi Avatar Button -->
+  <div id="nexi-chat-button" onclick="Tawk_API.maximize()">
+    <img src="images/nexi.png" alt="Chat with Nexi">
+  </div>
+
+  <!-- Optional Sound -->
+  <audio id="nexi-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6bfa97ec3d.mp3?filename=pop-94319.mp3" preload="auto"></audio>
 
   <!-- Tawk.to Script -->
   <script type="text/javascript">
@@ -266,25 +275,36 @@
     })();
 
     Tawk_API.onLoad = function() {
-      setTimeout(function() {
-        Tawk_API.hideWidget();
-        // Play sound and show bubble only once per session
-        if (!sessionStorage.getItem('nexiGreeted')) {
-          var bubble = document.getElementById("chat-bubble");
-          var audio = new Audio("pop.mp3"); // ensure this file exists
-          bubble.style.display = "block";
-          audio.play();
-          sessionStorage.setItem('nexiGreeted', 'true');
-        }
-      }, 100);
+      Tawk_API.hideWidget();
     };
   </script>
 
-  <!-- Nexi Avatar -->
-  <div id="nexi-chat-button" onclick="Tawk_API.maximize()">
-    <img src="images/nexi.png" alt="Chat with Nexi">
-  </div>
-  <div id="chat-bubble">💬 Need help?</div>
+  <!-- Bubble Show Once + Auto Hide -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const bubble = document.querySelector(".chat-bubble");
+      const sound = document.getElementById("nexi-sound");
+
+      if (!sessionStorage.getItem("nexiBubbleShown")) {
+        bubble.style.display = "block";
+        setTimeout(() => {
+          bubble.style.opacity = "1";
+          bubble.style.transform = "translateY(0)";
+          sound.play();
+        }, 500);
+
+        setTimeout(() => {
+          bubble.style.opacity = "0";
+          bubble.style.transform = "translateY(10px)";
+          setTimeout(() => {
+            bubble.style.display = "none";
+          }, 500);
+        }, 8500);
+
+        sessionStorage.setItem("nexiBubbleShown", "true");
+      }
+    });
+  </script>
 </body>
 </html>
 
