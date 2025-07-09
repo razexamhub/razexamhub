@@ -377,34 +377,31 @@
 
     function handleSwipe() {
       const deltaX = touchEndX - touchStartX;
+      const current = window.location.pathname;
 
       if (Math.abs(deltaX) > 80) {
+        // 🛑 Prevent right swipe on homepage
+        if (current.includes("index") && deltaX > 0) return;
+
         document.body.style.transition = "opacity 0.4s ease";
         document.body.style.opacity = "0";
 
         setTimeout(() => {
-          const current = window.location.pathname;
-
           if (deltaX < 0) {
-            // Swipe Left
-            if (current.includes("index")) {
-              window.location.href = "about.html";
-            } else if (current.includes("about")) {
-              window.location.href = "contact.html";
-            } // Prevent left swipe from contact.html (no page after)
+            // Swipe Left →
+            if (current.includes("index")) window.location.href = "about.html";
+            else if (current.includes("about")) window.location.href = "contact.html";
           } else {
-            // Swipe Right
-            if (current.includes("contact")) {
-              window.location.href = "about.html";
-            } else if (current.includes("about")) {
-              window.location.href = "index.html";
-            } // Prevent right swipe from index.html (no page before)
+            // Swipe Right ←
+            if (current.includes("contact")) window.location.href = "about.html";
+            else if (current.includes("about")) window.location.href = "index.html";
           }
         }, 400);
       }
     }
   }
 </script>
+
 
 </body>
 </html>
