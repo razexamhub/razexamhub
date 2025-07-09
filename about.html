@@ -305,7 +305,7 @@
     topBtn.style.display = window.scrollY > 200 ? "block" : "none";
   });
 </script>
-  <script>
+<script>
   let touchStartX = 0;
   let touchEndX = 0;
   const screenWidth = window.innerWidth;
@@ -322,23 +322,19 @@
 
     function handleSwipe() {
       const deltaX = touchEndX - touchStartX;
+      const current = window.location.pathname;
 
       if (Math.abs(deltaX) > 80) {
-        document.body.style.transition = "opacity 0.4s ease";
+        document.body.style.transition = "opacity 0.2s ease";
         document.body.style.opacity = "0";
 
         setTimeout(() => {
-          const current = window.location.pathname;
           if (deltaX < 0) {
-            // Swipe left
-            if (current.includes("index")) window.location.href = "about.html";
-            else if (current.includes("about")) window.location.href = "contact.html";
+            window.location.href = "contact.html";
           } else {
-            // Swipe right
-            if (current.includes("contact")) window.location.href = "about.html";
-            else if (current.includes("about")) window.location.href = "index.html";
+            window.location.href = "index.html";
           }
-        }, 400);
+        }, 200);
       }
     }
   }
