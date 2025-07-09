@@ -380,27 +380,26 @@
       const current = window.location.pathname;
 
       if (Math.abs(deltaX) > 80) {
-        // 🛑 Prevent right swipe on homepage
+        // 🛑 Stop right swipe on homepage
         if (current.includes("index") && deltaX > 0) return;
 
-        document.body.style.transition = "opacity 0.4s ease";
+        document.body.style.transition = "opacity 0.2s ease";
         document.body.style.opacity = "0";
 
         setTimeout(() => {
           if (deltaX < 0) {
-            // Swipe Left →
             if (current.includes("index")) window.location.href = "about.html";
             else if (current.includes("about")) window.location.href = "contact.html";
           } else {
-            // Swipe Right ←
             if (current.includes("contact")) window.location.href = "about.html";
             else if (current.includes("about")) window.location.href = "index.html";
           }
-        }, 400);
+        }, 200);
       }
     }
   }
 </script>
+
 
 
 </body>
