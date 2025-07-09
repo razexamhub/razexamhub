@@ -281,24 +281,42 @@
 
     function handleSwipe() {
       const deltaX = touchEndX - touchStartX;
-      const current = window.location.pathname;
+      if (Math.abs(deltaX) < 80) return; // ignore small swipes
 
-      if (Math.abs(deltaX) > 80) {
-        document.body.style.transition = "opacity 0.2s ease";
-        document.body.style.opacity = "0";
+      const path = window.location.pathname;
+      const currentPage = path.substring(path.lastIndexOf('/') + 1);
 
-        setTimeout(() => {
-          if (deltaX < 0) {
-            // No page to the right of contact
-            return;
-          } else {
+      // Apply fade-out animation
+      document.body.style.transition = "opacity 0.3s ease";
+      document.body.style.opacity = "0";
+
+      setTimeout(() => {
+        if (deltaX < 0) {
+          // Swiping left ➡
+          if (currentPage === "index.html") {
             window.location.href = "about.html";
+          } else if (currentPage === "about.html") {
+            window.location.href = "contact.html";
+          } else {
+            // No further page after contact, stay on page
+            document.body.style.opacity = "1";
           }
-        }, 200);
-      }
+        } else {
+          // Swiping right ⬅
+          if (currentPage === "contact.html") {
+            window.location.href = "about.html";
+          } else if (currentPage === "about.html") {
+            window.location.href = "index.html";
+          } else {
+            // No previous page before home, stay on page
+            document.body.style.opacity = "1";
+          }
+        }
+      }, 300);
     }
   }
 </script>
+
 
  (screenWidth < 768) {
     d
