@@ -43,7 +43,60 @@
         theme: {
           color: "#2c3e50",
         },
+      };<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout - munu</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">🛍️ munu</a>
+    <a href="cart.html" class="cart-link">🛒 View Cart</a>
+  </header>
+
+  <main>
+    <h1>Checkout</h1>
+    <form id="checkoutForm">
+      <input type="text" placeholder="Full Name" required />
+      <input type="email" placeholder="Email" required />
+      <textarea placeholder="Address" required></textarea>
+      <button type="submit">Pay with Razorpay</button>
+    </form>
+  </main>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    document.getElementById("checkoutForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const options = {
+        key: "rzp_test_stSgFyQjlpFMEy", // Replace with your Razorpay key
+        amount: 10000,
+        currency: "INR",
+        name: "munu",
+        description: "Order Payment",
+        image: "",
+        handler: function (response) {
+          alert("Payment Successful: " + response.razorpay_payment_id);
+          localStorage.removeItem("cart");
+          window.location.href = "index.html";
+        },
+        theme: {
+          color: "#2c3e50",
+        },
       };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    });
+  </script>
+
+</body>
+</html>
 
       const rzp = new Razorpay(options);
       rzp.open();
