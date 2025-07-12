@@ -10,7 +10,7 @@
 
   <!-- ✅ Amazon-style Top Nav -->
   <header class="navbar">
-    <div class="logo">🛍️ munu</div>
+    <a href="index.html" class="logo">🛍️ munu</a>
     <input type="text" class="search-box" id="search" placeholder="Search products..." onkeyup="filterProducts()" />
     <a href="cart.html" class="cart-link">🛒 Cart</a>
   </header>
@@ -23,7 +23,6 @@
         <h2>Pet Food</h2>
       </a>
       <p>₹400</p>
-      <button onclick="addToCart('Pet Food', 400)">Add to Cart</button>
     </div>
 
     <div class="product">
@@ -32,7 +31,6 @@
         <h2>Mobile Cover</h2>
       </a>
       <p>₹250</p>
-      <button onclick="addToCart('Mobile Cover', 250)">Add to Cart</button>
     </div>
 
     <div class="product">
@@ -41,24 +39,11 @@
         <h2>LED Desk Lamp</h2>
       </a>
       <p>₹600</p>
-      <button onclick="addToCart('LED Desk Lamp', 600)">Add to Cart</button>
     </div>
   </main>
 
-  <!-- ✅ JavaScript for Cart and Search -->
+  <!-- ✅ JavaScript for Search Only -->
   <script>
-    function addToCart(name, price) {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const existing = cart.find(item => item.name === name);
-      if (existing) {
-        existing.qty++;
-      } else {
-        cart.push({ name, price, qty: 1 });
-      }
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert(name + " added to cart!");
-    }
-
     function filterProducts() {
       const input = document.getElementById("search").value.toLowerCase();
       const products = document.querySelectorAll(".product");
