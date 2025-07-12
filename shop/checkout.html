@@ -2,109 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout - munu</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background-color: #f4f4f4;
-    }
-
-    .checkout-container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      color: #333;
-      text-align: center;
-    }
-
-    label {
-      font-weight: bold;
-      margin-top: 15px;
-      display: block;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      background-color: #232f3e;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #1b2430;
-    }
-
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      text-decoration: none;
-      color: white;
-    }
-
-    .navbar {
-      display: flex;
-      align-items: center;
-      background-color: #232f3e;
-      color: white;
-      padding: 12px 20px;
-      justify-content: space-between;
-    }
-  </style>
 </head>
 <body>
 
   <header class="navbar">
     <a href="index.html" class="logo">🛍️ munu</a>
-    <a href="cart.html" class="cart-link">🛒 Cart</a>
+    <a href="cart.html" class="cart-link">🛒 View Cart</a>
   </header>
 
-  <div class="checkout-container">
-    <h2>Checkout</h2>
+  <main>
+    <h1>Checkout</h1>
     <form id="checkoutForm">
-      <label for="name">Full Name</label>
-      <input type="text" id="name" required />
-
-      <label for="phone">Phone Number</label>
-      <input type="tel" id="phone" required pattern="[0-9]{10}" placeholder="Enter 10-digit number" />
-
-      <label for="email">Email</label>
-      <input type="email" id="email" required />
-
-      <label for="address">Shipping Address</label>
-      <textarea id="address" rows="4" required></textarea>
-
-      <button type="submit">Place Order</button>
+      <input type="text" placeholder="Full Name" required />
+      <input type="email" placeholder="Email" required />
+      <textarea placeholder="Address" required></textarea>
+      <button type="submit">Pay with Razorpay</button>
     </form>
-  </div>
+  </main>
 
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     document.getElementById("checkoutForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      alert("✅ Order placed successfully!");
-      localStorage.removeItem("cart");
-      window.location.href = "index.html";
+
+      const options = {
+        key: "rzp_test_stSgFyQjlpFMEy", // Replace with your Razorpay key
+        amount: 10000,
+        currency: "INR",
+        name: "munu",
+        description: "Order Payment",
+        image: "",
+        handler: function (response) {
+          alert("Payment Successful: " + response.razorpay_payment_id);
+          localStorage.removeItem("cart");
+          window.location.href = "index.html";
+        },
+        theme: {
+          color: "#2c3e50",
+        },
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
     });
   </script>
 
