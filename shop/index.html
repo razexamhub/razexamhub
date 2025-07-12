@@ -15,35 +15,58 @@
     <a href="cart.html" class="cart-link">🛒 Cart</a>
   </header>
 
-  <!-- ✅ Product Grid Starts Here -->
+  <!-- ✅ Product Grid (dynamic from Google Sheet) -->
   <main class="product-grid" id="productGrid">
-    <div class="product">
-      <a href="product.html?name=Pet%20Food">
-        <img src="https://via.placeholder.com/300x200?text=Pet+Food" alt="Pet Food">
-        <h2>Pet Food</h2>
-      </a>
-      <p>₹400</p>
-    </div>
-
-    <div class="product">
-      <a href="product.html?name=Mobile%20Cover">
-        <img src="https://via.placeholder.com/300x200?text=Mobile+Cover" alt="Mobile Cover">
-        <h2>Mobile Cover</h2>
-      </a>
-      <p>₹250</p>
-    </div>
-
-    <div class="product">
-      <a href="product.html?name=LED%20Desk%20Lamp">
-        <img src="https://via.placeholder.com/300x200?text=LED+Desk+Lamp" alt="LED Desk Lamp">
-        <h2>LED Desk Lamp</h2>
-      </a>
-      <p>₹600</p>
-    </div>
+    <!-- Products will be loaded here by JavaScript -->
   </main>
 
-  <!-- ✅ JavaScript for Search Only -->
+  <!-- ✅ JavaScript for Search and Dynamic Products -->
   <script>
+    const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0-4wOgHqkyoqU5NV0cX9YCA7DXTF34RVy8VNrpMSWkx-jY8EzCOiphptQuamdLyOaCC8PfmtHWRCH/pub?output=csv";
+
+    async function fetchProducts() {
+      const res = await fetch(sheetURL);
+      const data = await res.text();
+
+      const rows = data.trim().split('\n').slice(1); // Skip headers
+      const products = rows.map(row => {
+        const cols = row.split(',');
+        return {
+          id: cols[0],
+          name: cols[1],
+          price: cols[2],
+          description: cols[3],
+          image1: cols[4],
+          image2: cols[5],
+          image3: cols[6]
+        };
+      });
+
+      displayProducts(products);
+    }
+
+    function displayProducts(products) {
+      const grid = document.getElementById("productGrid");
+      grid.innerHTML = ""; // Clear any existing items
+
+      products.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product";
+        card.innerHTML = `
+          <a href="product.html" onclick='viewProduct(${JSON.stringify(product)})'>
+            <img src="${product.image1}" alt="${product.name}">
+            <h2>${product.name}</h2>
+          </a>
+          <p>₹${product.price}</p>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function viewProduct(product) {
+      localStorage.setItem("selectedProduct", JSON.stringify(product));
+    }
+
     function filterProducts() {
       const input = document.getElementById("search").value.toLowerCase();
       const products = document.querySelectorAll(".product");
@@ -53,6 +76,8 @@
         product.style.display = title.includes(input) ? "block" : "none";
       });
     }
+
+    fetchProducts();
   </script>
 
 </body>
