@@ -11,12 +11,12 @@
   <!-- ✅ Amazon-style Top Nav -->
   <header class="navbar">
     <div class="logo">🛍️ Nexi Store</div>
-    <input type="text" class="search-box" placeholder="Search products..." />
+    <input type="text" class="search-box" id="search" placeholder="Search products..." onkeyup="filterProducts()" />
     <a href="cart.html" class="cart-link">🛒 Cart</a>
   </header>
 
   <!-- ✅ Product Grid Starts Here -->
-  <main class="product-grid">
+  <main class="product-grid" id="productGrid">
     <div class="product">
       <img src="https://via.placeholder.com/300x200?text=Pet+Food" alt="Pet Food">
       <h2>Pet Food</h2>
@@ -39,6 +39,7 @@
     </div>
   </main>
 
+  <!-- ✅ JavaScript for Cart and Search -->
   <script>
     function addToCart(name, price) {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -50,6 +51,16 @@
       }
       localStorage.setItem("cart", JSON.stringify(cart));
       alert(name + " added to cart!");
+    }
+
+    function filterProducts() {
+      const input = document.getElementById("search").value.toLowerCase();
+      const products = document.querySelectorAll(".product");
+
+      products.forEach(product => {
+        const title = product.querySelector("h2").textContent.toLowerCase();
+        product.style.display = title.includes(input) ? "block" : "none";
+      });
     }
   </script>
 
