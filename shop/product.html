@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product - munu</title>
+  <title>Product Details - munu</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     .product-detail {
       max-width: 800px;
-      margin: auto;
+      margin: 30px auto;
       background: #fff;
       padding: 20px;
       border-radius: 10px;
@@ -31,9 +31,10 @@
       gap: 10px;
       align-items: center;
     }
-    .quantity-select input {
-      width: 60px;
-      padding: 6px;
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 50px;
     }
   </style>
 </head>
@@ -44,29 +45,59 @@
     <a href="cart.html" class="cart-link">🛒 Cart</a>
   </header>
 
-  <div class="product-detail" id="productDetail">
-    <!-- Product content will be injected by JS -->
-  </div>
+  <div id="productContainer"></div>
 
   <script>
+    const container = document.getElementById("productContainer");
     const product = JSON.parse(localStorage.getItem("selectedProduct"));
-    const detailDiv = document.getElementById("productDetail");
 
-    if (product) {
-      const price = parseFloat(product.price);
+    if (!product || !product.name) {
+      container.innerHTML = '<div class="error">❌ Product details not found.</div>';
+    } else {
+      container.innerHTML = `
+        <div class="product-detail">
+          <div class="product-gallery">
+            <img src="${product.image1}" alt="${product.name} Image 1">
+            <img src="${product.image2}" alt="${product.name} Image 2">
+            <img src="${product.image3}" alt="${product.name} Image 3">
+          </div>
+          <h1>${product.name}</h1>
+          <p><strong>Price:</strong> ₹${product.price}</p>
+          <p>${product.description}</p>
 
-      detailDiv.innerHTML = `
-        <div class="product-gallery">
-          <img src="${product.image1}" alt="${product.name} Image 1" />
-          <img src="${product.image2}" alt="${product.name} Image 2" />
-          <img src="${product.image3}" alt="${product.name} Image 3" />
+          <div class="quantity-select">
+            <label for="qty">Qty:</label>
+            <input type="number" id="qty" value="1" min="1" />
+            <span id="totalDisplay">Total: ₹${product.price}</span>
+          </div>
+
+          <button onclick="addToCart()">Add to Cart</button>
         </div>
-        <h1>${product.name}</h1>
-        <p><strong>Price:</strong> ₹${price}</p>
-        <p>${product.description}</p>
+      `;
 
-        <div class="quantity-select">
-          <label for="qty">Qty:</label>
-          <input type="number" id="qty" value="1" min="1" />
-          <span id="totalDisplay">Total: ₹${price}</span>
-        </div>
+      const price = product.price;
+      const qtyInput = document.getElementById("qty");
+      const totalDisplay = document.getElementById("totalDisplay");
+
+      qtyInput.addEventListener("input", () => {
+        const qty = parseInt(qtyInput.value) || 1;
+        totalDisplay.textContent = "Total: ₹" + (qty * price);
+      });
+
+      window.addToCart = function () {
+        const qty = parseInt(qtyInput.value) || 1;
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const existing = cart.find(item => item.name === product.name);
+        if (existing) {
+          existing.qty += qty;
+        } else {
+          cart.push({ name: product.name, price, qty });
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(`${qty} item(s) added to cart.`);
+      };
+    }
+  </script>
+
+</body>
+</html>
