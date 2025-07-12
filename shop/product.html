@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Munu - Product Details</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .product-detail {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .product-gallery {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+    .product-gallery img {
+      max-height: 200px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .product-detail h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .product-detail p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .quantity-select {
+      margin: 15px 0;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    #price-display {
+      font-weight: bold;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">🛍️ Munu</div>
+    <a href="index.html" class="cart-link">⬅️ Back to Store</a>
+  </header>
+
+  <div class="product-detail">
+    <div class="product-gallery">
+      <img src="https://via.placeholder.com/600x400?text=Lamp+Front" alt="Lamp Front">
+      <img src="https://via.placeholder.com/600x400?text=Lamp+Side" alt="Lamp Side">
+      <img src="https://via.placeholder.com/600x400?text=Lamp+Box" alt="Lamp Box">
+    </div>
+
+    <h1>LED Desk Lamp</h1>
+    <p><strong>Price:</strong> ₹600</p>
+    <p>A sleek and modern LED desk lamp with 3 brightness levels, USB charging, and touch control. Perfect for study, work, or bedside use.</p>
+
+    <div class="quantity-select">
+      <label for="qty">Qty:</label>
+      <input type="number" id="qty" value="1" min="1" style="width: 60px;">
+      <span id="price-display">Total: ₹600</span>
+    </div>
+
+    <button onclick="addToCart()">Add to Cart</button>
+  </div>
+
+  <script>
+    const basePrice = 600;
+    const qtyInput = document.getElementById("qty");
+    const priceDisplay = document.getElementById("price-display");
+
+    qtyInput.addEventListener("input", () => {
+      const qty = parseInt(qtyInput.value) || 1;
+      priceDisplay.textContent = "Total: ₹" + (basePrice * qty);
+    });
+
+    function addToCart() {
+      const qty = parseInt(document.getElementById("qty").value) || 1;
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const name = "LED Desk Lamp";
+      const price = 600;
+      const existing = cart.find(item => item.name === name);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({ name, price, qty });
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${qty} item(s) added to cart.`);
+    }
+  </script>
+
+</body>
+</html>
