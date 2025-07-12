@@ -7,27 +7,67 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Welcome to Nexi Store</h1>
-    <nav>
-      <a href="cart.html">🛒 View Cart</a>
-    </nav>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">🛍️ Nexi Store</div>
+    <input type="text" class="search-box" placeholder="Search products..." />
+    <a href="cart.html" class="cart-link">🛒 Cart</a>
   </header>
 
-  <main>
+  <!-- Product Grid -->
+  <main class="product-grid">
     <div class="product">
+      <img src="https://via.placeholder.com/300x200?text=Pet+Food" alt="Pet Food" />
       <h2>Pet Food</h2>
       <p>₹400</p>
       <button onclick="addToCart('Pet Food', 400)">Add to Cart</button>
     </div>
 
     <div class="product">
+      <img src="https://via.placeholder.com/300x200?text=Mobile+Cover" alt="Mobile Cover" />
       <h2>Mobile Cover</h2>
       <p>₹250</p>
       <button onclick="addToCart('Mobile Cover', 250)">Add to Cart</button>
     </div>
 
     <div class="product">
+      <img src="https://via.placeholder.com/300x200?text=LED+Desk+Lamp" alt="LED Desk Lamp" />
+      <h2>LED Desk Lamp</h2><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexi Store</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">🛍️ Nexi Store</div>
+    <input type="text" class="search-box" placeholder="Search products..." />
+    <a href="cart.html" class="cart-link">🛒 Cart</a>
+  </header>
+
+  <!-- Product Grid -->
+  <main class="product-grid">
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200?text=Pet+Food" alt="Pet Food" />
+      <h2>Pet Food</h2>
+      <p>₹400</p>
+      <button onclick="addToCart('Pet Food', 400)">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200?text=Mobile+Cover" alt="Mobile Cover" />
+      <h2>Mobile Cover</h2>
+      <p>₹250</p>
+      <button onclick="addToCart('Mobile Cover', 250)">Add to Cart</button>
+    </div>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200?text=LED+Desk+Lamp" alt="LED Desk Lamp" />
       <h2>LED Desk Lamp</h2>
       <p>₹600</p>
       <button onclick="addToCart('LED Desk Lamp', 600)">Add to Cart</button>
@@ -48,39 +88,27 @@
     }
   </script>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f4f4f4;
+</body>
+</html>
+
+      <p>₹600</p>
+      <button onclick="addToCart('LED Desk Lamp', 600)">Add to Cart</button>
+    </div>
+  </main>
+
+  <script>
+    function addToCart(name, price) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existing = cart.find(item => item.name === name);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ name, price, qty: 1 });
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(name + " added to cart!");
     }
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    nav a {
-      text-decoration: none;
-      color: #007bff;
-      font-weight: bold;
-    }
-    .product {
-      background: white;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    button {
-      padding: 0.5rem 1rem;
-      background-color: #2c3e50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #1a252f;
-    }
-  </style>
+  </script>
+
 </body>
 </html>
