@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LED Desk Lamp - munu</title>
+  <title>Product - munu</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     .product-detail {
@@ -31,94 +31,9 @@
       gap: 10px;
       align-items: center;
     }
-  </style>
-</head>
-<body>
-
-  <header class="navbar">
-    <a href="index.html" class="logo">🛍️ munu</a>
-    <a href="cart.html" class="cart-link">🛒 Cart</a>
-  </header>
-
-  <div class="product-detail">
-    <div class="product-gallery">
-      <img src="https://via.placeholder.com/600x400?text=Lamp+Front" alt="Lamp Front">
-      <img src="https://via.placeholder.com/600x400?text=Lamp+Side" alt="Lamp Side">
-      <img src="https://via.placeholder.com/600x400?text=Lamp+Box" alt="Lamp Box">
-    </div>
-
-    <h1>LED Desk Lamp</h1>
-    <p><strong>Price:</strong> ₹600</p>
-    <p>A sleek and modern LED desk lamp with 3 brightness levels, USB charging, and touch control. Perfect for study, work, or bedside use.</p>
-
-    <div class="quantity-select">
-      <label for="qty">Qty:</label>
-      <input type="number" id="qty" value="1" min="1" />
-      <span id="totalDisplay">Total: ₹600</span>
-    </div>
-
-    <button onclick="addToCart()">Add to Cart</button>
-  </div>
-
-  <script>
-    const price = 600;
-    const qtyInput = document.getElementById("qty");
-    const totalDisplay = document.getElementById("totalDisplay");
-
-    qtyInput.addEventListener("input", () => {
-      const qty = parseInt(qtyInput.value) || 1;
-      totalDisplay.textContent = "Total: ₹" + (qty * price);
-    });
-
-    function addToCart() {
-      const qty = parseInt(qtyInput.value) || 1;
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const name = "LED Desk Lamp";
-      const existing = cart.find(item => item.name === name);
-      if (existing) {
-        existing.qty += qty;
-      } else {
-        cart.push({ name, price, qty });
-      }
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert(`${qty} item(s) added to cart.`);
-    }
-  </script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LED Desk Lamp - munu</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .product-detail {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .product-gallery {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      margin-bottom: 20px;
-    }
-    .product-gallery img {
-      max-height: 200px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .quantity-select {
-      margin: 15px 0;
-      display: flex;
-      gap: 10px;
-      align-items: center;
+    .quantity-select input {
+      width: 60px;
+      padding: 6px;
     }
   </style>
 </head>
@@ -129,50 +44,29 @@
     <a href="cart.html" class="cart-link">🛒 Cart</a>
   </header>
 
-  <div class="product-detail">
-    <div class="product-gallery">
-      <img src="https://via.placeholder.com/600x400?text=Lamp+Front" alt="Lamp Front">
-      <img src="https://via.placeholder.com/600x400?text=Lamp+Side" alt="Lamp Side">
-      <img src="https://via.placeholder.com/600x400?text=Lamp+Box" alt="Lamp Box">
-    </div>
-
-    <h1>LED Desk Lamp</h1>
-    <p><strong>Price:</strong> ₹600</p>
-    <p>A sleek and modern LED desk lamp with 3 brightness levels, USB charging, and touch control. Perfect for study, work, or bedside use.</p>
-
-    <div class="quantity-select">
-      <label for="qty">Qty:</label>
-      <input type="number" id="qty" value="1" min="1" />
-      <span id="totalDisplay">Total: ₹600</span>
-    </div>
-
-    <button onclick="addToCart()">Add to Cart</button>
+  <div class="product-detail" id="productDetail">
+    <!-- Product content will be injected by JS -->
   </div>
 
   <script>
-    const price = 600;
-    const qtyInput = document.getElementById("qty");
-    const totalDisplay = document.getElementById("totalDisplay");
+    const product = JSON.parse(localStorage.getItem("selectedProduct"));
+    const detailDiv = document.getElementById("productDetail");
 
-    qtyInput.addEventListener("input", () => {
-      const qty = parseInt(qtyInput.value) || 1;
-      totalDisplay.textContent = "Total: ₹" + (qty * price);
-    });
+    if (product) {
+      const price = parseFloat(product.price);
 
-    function addToCart() {
-      const qty = parseInt(qtyInput.value) || 1;
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const name = "LED Desk Lamp";
-      const existing = cart.find(item => item.name === name);
-      if (existing) {
-        existing.qty += qty;
-      } else {
-        cart.push({ name, price, qty });
-      }
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert(`${qty} item(s) added to cart.`);
-    }
-  </script>
+      detailDiv.innerHTML = `
+        <div class="product-gallery">
+          <img src="${product.image1}" alt="${product.name} Image 1" />
+          <img src="${product.image2}" alt="${product.name} Image 2" />
+          <img src="${product.image3}" alt="${product.name} Image 3" />
+        </div>
+        <h1>${product.name}</h1>
+        <p><strong>Price:</strong> ₹${price}</p>
+        <p>${product.description}</p>
 
-</body>
-</html>
+        <div class="quantity-select">
+          <label for="qty">Qty:</label>
+          <input type="number" id="qty" value="1" min="1" />
+          <span id="totalDisplay">Total: ₹${price}</span>
+        </div>
