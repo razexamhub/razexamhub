@@ -5,6 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout - munu</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      background-color: #232f3e;
+      color: white;
+      padding: 12px 20px;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+    }
+
+    .cart-link {
+      color: white;
+      text-decoration: none;
+    }
+
+    .checkout-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, textarea {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 14px;
+      font-size: 16px;
+      background-color: #232f3e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1b2430;
+    }
+  </style>
 </head>
 <body>
 
@@ -13,90 +81,46 @@
     <a href="cart.html" class="cart-link">🛒 View Cart</a>
   </header>
 
-  <main>
+  <div class="checkout-container">
     <h1>Checkout</h1>
     <form id="checkoutForm">
-      <input type="text" placeholder="Full Name" required />
-      <input type="email" placeholder="Email" required />
-      <textarea placeholder="Address" required></textarea>
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="tel" id="phone" placeholder="Phone Number" required pattern="[0-9]{10}" />
+      <input type="email" id="email" placeholder="Email" required />
+      <textarea id="address" placeholder="Address" required></textarea>
       <button type="submit">Pay with Razorpay</button>
     </form>
-  </main>
+  </div>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     document.getElementById("checkoutForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
+
       const options = {
-        key: "rzp_test_stSgFyQjlpFMEy", // Replace with your Razorpay key
-        amount: 10000,
+        key: "rzp_test_stSgFyQjlpFMEy", // Replace with your Razorpay Key
+        amount: 10000, // ₹100.00
         currency: "INR",
         name: "munu",
         description: "Order Payment",
-        image: "",
+        prefill: {
+          name: name,
+          email: email,
+          contact: phone
+        },
         handler: function (response) {
-          alert("Payment Successful: " + response.razorpay_payment_id);
+          alert("✅ Payment Successful: " + response.razorpay_payment_id);
           localStorage.removeItem("cart");
           window.location.href = "index.html";
         },
         theme: {
-          color: "#2c3e50",
-        },
-      };<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Checkout - munu</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-  <header class="navbar">
-    <a href="index.html" class="logo">🛍️ munu</a>
-    <a href="cart.html" class="cart-link">🛒 View Cart</a>
-  </header>
-
-  <main>
-    <h1>Checkout</h1>
-    <form id="checkoutForm">
-      <input type="text" placeholder="Full Name" required />
-      <input type="email" placeholder="Email" required />
-      <textarea placeholder="Address" required></textarea>
-      <button type="submit">Pay with Razorpay</button>
-    </form>
-  </main>
-
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script>
-    document.getElementById("checkoutForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const options = {
-        key: "rzp_test_stSgFyQjlpFMEy", // Replace with your Razorpay key
-        amount: 10000,
-        currency: "INR",
-        name: "munu",
-        description: "Order Payment",
-        image: "",
-        handler: function (response) {
-          alert("Payment Successful: " + response.razorpay_payment_id);
-          localStorage.removeItem("cart");
-          window.location.href = "index.html";
-        },
-        theme: {
-          color: "#2c3e50",
-        },
+          color: "#2c3e50"
+        }
       };
-
-      const rzp = new Razorpay(options);
-      rzp.open();
-    });
-  </script>
-
-</body>
-</html>
 
       const rzp = new Razorpay(options);
       rzp.open();
