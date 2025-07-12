@@ -28,6 +28,12 @@ body {
   font-size: 20px;
   font-weight: bold;
   white-space: nowrap;
+  text-decoration: none;   /* removes underline */
+  color: white;            /* keeps it white like the nav */
+}
+
+.logo:hover {
+  color: #dddddd;           /* optional: subtle hover effect */
 }
 
 .search-box {
@@ -39,6 +45,7 @@ body {
   border: none;
   border-radius: 4px;
 }
+
 
 .cart-link {
   color: white;
