@@ -3,44 +3,86 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Cart</title>
+  <title>Your Cart - Nexi Store</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Your Cart</h1>
-    <nav><a href="index.html">← Back to Store</a></nav>
+
+  <header class="navbar">
+    <div class="logo">🛍️ Nexi Store</div>
+    <a href="index.html" class="cart-link">⬅️ Continue Shopping</a>
   </header>
 
   <main>
-    <div id="cart-items"></div>
-    <h2>Total: ₹<span id="total">0</span></h2>
-    <a href="checkout.html"><button>Proceed to Checkout</button></a>
+    <h2 style="text-align:center; margin: 20px 0;">Your Shopping Cart</h2>
+    <div id="cart-container"></div>
   </main>
 
   <script>
-    const cartContainer = document.getElementById('cart-items');
-    const totalElement = document.getElementById('total');
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    function loadCart() {
+      const cartContainer = document.getElementById("cart-container");
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    if (cart.length === 0) {
-      cartContainer.innerHTML = "<p>Your cart is empty.</p>";
-    } else {
-      let total = 0;
-      cart.forEach(item => {
-        const div = document.createElement('div');
-        div.classList.add('product-card');
-        div.innerHTML = `
-          <h3>${item.name}</h3>
-          <p>Price: ₹${item.price}</p>
-          <p>Quantity: ${item.qty}</p>
-          <p>Subtotal: ₹${item.price * item.qty}</p>
+      if (cart.length === 0) {
+        cartContainer.innerHTML = "<p style='text-align:center;'>Your cart is empty.</p>";
+        return;
+      }
+
+      let table = `
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Total</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      let grandTotal = 0;
+
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        grandTotal += itemTotal;
+
+        table += `
+          <tr>
+            <td>${item.name}</td>
+            <td>₹${item.price}</td>
+            <td>${item.qty}</td>
+            <td>₹${itemTotal}</td>
+            <td><button onclick="removeItem(${index})">Remove</button></td>
+          </tr>
         `;
-        cartContainer.appendChild(div);
-        total += item.price * item.qty;
       });
-      totalElement.textContent = total;
+
+      table += `
+          <tr>
+            <td colspan="3" style="text-align:right;"><strong>Grand Total:</strong></td>
+            <td><strong>₹${grandTotal}</strong></td>
+            <td></td>
+          </tr>
+        </tbody></table>
+        <div style="text-align:center; margin-top: 20px;">
+          <a href="checkout.html"><button>Proceed to Checkout</button></a>
+        </div>
+      `;
+
+      cartContainer.innerHTML = table;
     }
+
+    function removeItem(index) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    window.onload = loadCart;
   </script>
+
 </body>
 </html>
