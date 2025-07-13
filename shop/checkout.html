@@ -93,17 +93,28 @@
   </div>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
+    emailjs.init("YOUR_USER_ID"); // Replace with your actual EmailJS User ID
+
     document.getElementById("checkoutForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
       const name = document.getElementById("name").value;
       const phone = document.getElementById("phone").value;
       const email = document.getElementById("email").value;
+      const address = document.getElementById("address").value;
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      const itemDetails = cart.map(item =>
+        `${item.name} (Qty: ${item.qty}) - ₹${item.price * item.qty}`
+      ).join('\n');
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
       const options = {
-        key: "rzp_test_stSgFyQjlpFMEy", // Replace with your Razorpay Key
-        amount: 10000, // ₹100.00
+        key: "rzp_test_stSgFyQjlpFMEy",
+        amount: total * 100, // in paise
         currency: "INR",
         name: "munu",
         description: "Order Payment",
@@ -113,13 +124,25 @@
           contact: phone
         },
         handler: function (response) {
-          alert("✅ Payment Successful: " + response.razorpay_payment_id);
-          localStorage.removeItem("cart");
-          window.location.href = "index.html";
+          // Send Email
+          emailjs.send("default_service", "YOUR_TEMPLATE_ID", {
+            customer_name: name,
+            customer_email: email,
+            customer_phone: phone,
+            customer_address: address,
+            cart_details: itemDetails,
+            total_price: total,
+            payment_id: response.razorpay_payment_id,
+            admin_email: "admin@razexamhub.in"
+          }).then(function () {
+            alert("✅ Payment successful. Confirmation email sent.");
+            localStorage.removeItem("cart");
+            window.location.href = "index.html";
+          }, function (error) {
+            alert("Payment succeeded but failed to send email: " + error.text);
+          });
         },
-        theme: {
-          color: "#2c3e50"
-        }
+        theme: { color: "#2c3e50" }
       };
 
       const rzp = new Razorpay(options);
