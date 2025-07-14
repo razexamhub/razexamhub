@@ -83,14 +83,11 @@
     </form>
   </div>
 
-  <!-- Razorpay -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-  <!-- EmailJS SDK with ES Module -->
   <script type="module">
     import emailjs from 'https://esm.sh/@emailjs/browser';
 
-    emailjs.init("cog20Tx1ONd3oFBb6"); // ✅ Replace with your public key
+    emailjs.init("cog20Tx1ONd3oFBb6"); // ✅ Your EmailJS public key
 
     document.getElementById("checkoutForm").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -106,16 +103,24 @@
         return;
       }
 
-      const itemDetails = cart.map(item =>
-        `${item.name} (Qty: ${item.qty}) - ₹${item.price * item.qty}`
-      ).join('\n');
+      const shippingCharge = 40;
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const taxAmount = Math.round(subtotal * 0.12); // 12% tax
+      const totalAmount = subtotal + shippingCharge + taxAmount;
 
-      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
       const orderId = "ORD" + Math.floor(Math.random() * 1000000);
 
+      // Build orders array to match template
+      const orders = cart.map(item => ({
+        name: item.name,
+        units: item.qty,
+        price: item.price * item.qty,
+        image_url: item.image || "" // Make sure cart has image field
+      }));
+
       const rzp = new Razorpay({
-        key: "rzp_test_stSgFyQjlpFMEy", // ✅ Replace with your Razorpay key
-        amount: total * 100,
+        key: "rzp_test_stSgFyQjlpFMEy",
+        amount: totalAmount * 100, // in paise
         currency: "INR",
         name: "munu",
         description: "Order Payment",
@@ -128,15 +133,17 @@
         handler: function (response) {
           emailjs.send("service_qupgv9m", "template_t4eh97j", {
             order_id: orderId,
-            orders: itemDetails,
+            orders: orders, // send full order list
             name,
             email,
-            units: cart.map(item => item.qty).join(', '),
-            price: total,
-            cost: total,
             address,
             phone,
-            payment_id: response.razorpay_payment_id
+            payment_id: response.razorpay_payment_id,
+            cost: {
+              total: totalAmount,
+              tax: taxAmount,
+              shipping: shippingCharge
+            }
           }).then(() => {
             alert("✅ Payment successful. Email sent.");
             localStorage.removeItem("cart");
