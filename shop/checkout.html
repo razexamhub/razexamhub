@@ -83,30 +83,38 @@
     </form>
   </div>
 
+  <!-- Razorpay + EmailJS -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script>
-    emailjs.init("cog20Tx1ONd3oFBb6"); // Your public key
+    (function () {
+      emailjs.init("cog20Tx1ONd3oFBb6"); // ✅ Your EmailJS public key
+    })();
 
     document.getElementById("checkoutForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
-      const email = document.getElementById("email").value;
-      const address = document.getElementById("address").value;
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
 
       const itemDetails = cart.map(item =>
         `${item.name} (Qty: ${item.qty}) - ₹${item.price * item.qty}`
       ).join('\n');
 
       const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-      const orderId = Math.floor(Math.random() * 1000000);
+      const orderId = "ORD" + Math.floor(Math.random() * 1000000);
 
       const options = {
-        key: "rzp_test_stSgFyQjlpFMEy",
-        amount: total * 100, // amount in paise
+        key: "rzp_test_stSgFyQjlpFMEy", // ✅ Your Razorpay test key
+        amount: total * 100,
         currency: "INR",
         name: "munu",
         description: "Order Payment",
@@ -116,7 +124,7 @@
           contact: phone
         },
         handler: function (response) {
-          // Send email via EmailJS
+          // ✅ Send Email after successful payment
           emailjs.send("service_qupgv9m", "template_t4eh97j", {
             order_id: orderId,
             orders: itemDetails,
@@ -126,7 +134,8 @@
             price: total,
             cost: total,
             address: address,
-            phone: phone
+            phone: phone,
+            payment_id: response.razorpay_payment_id
           }).then(function () {
             alert("✅ Payment successful. Email sent.");
             localStorage.removeItem("cart");
