@@ -1,9 +1,103 @@
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-  emailjs.init("cog20Tx1ONd3oFBb6");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout - munu</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+    }
 
-  document.addEventListener("DOMContentLoaded", function () {
+    .navbar {
+      display: flex;
+      align-items: center;
+      background-color: #232f3e;
+      color: white;
+      padding: 12px 20px;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+    }
+
+    .cart-link {
+      color: white;
+      text-decoration: none;
+    }
+
+    .checkout-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, textarea {
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 14px;
+      font-size: 16px;
+      background-color: #232f3e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1b2430;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">🛍️ munu</a>
+    <a href="cart.html" class="cart-link">🛒 View Cart</a>
+  </header>
+
+  <div class="checkout-container">
+    <h1>Checkout</h1>
+    <form id="checkoutForm">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="tel" id="phone" placeholder="Phone Number" required pattern="[0-9]{10}" />
+      <input type="email" id="email" placeholder="Email" required />
+      <textarea id="address" placeholder="Address" required></textarea>
+      <button type="submit">Pay with Razorpay</button>
+    </form>
+  </div>
+
+  <!-- Razorpay & EmailJS -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init("cog20Tx1ONd3oFBb6"); // ✅ Replace with your EmailJS public key
+
     document.getElementById("checkoutForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
@@ -32,7 +126,7 @@
       }));
 
       const rzp = new Razorpay({
-        key: "rzp_test_stSgFyQjlpFMEy",
+        key: "rzp_test_stSgFyQjlpFMEy", // ✅ Replace with your Razorpay key
         amount: totalAmount * 100,
         currency: "INR",
         name: "munu",
@@ -44,14 +138,16 @@
         },
         theme: { color: "#2c3e50" },
         handler: function (response) {
+          const paymentId = response.razorpay_payment_id || "N/A";
+
           emailjs.send("service_qupgv9m", "template_t4eh97j", {
             order_id: orderId,
-            orders: JSON.stringify(orders),
+            orders: JSON.stringify(orders), // if using array
             name,
             email,
             address,
             phone,
-            payment_id: response.razorpay_payment_id || "N/A",
+            payment_id: paymentId,
             cost: {
               total: totalAmount,
               tax: taxAmount,
@@ -69,5 +165,7 @@
 
       rzp.open();
     });
-  });
-</script>
+  </script>
+
+</body>
+</html>
