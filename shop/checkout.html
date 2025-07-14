@@ -10,7 +10,6 @@
       background-color: #f4f4f4;
       font-family: Arial, sans-serif;
     }
-
     .navbar {
       display: flex;
       align-items: center;
@@ -19,19 +18,16 @@
       padding: 12px 20px;
       justify-content: space-between;
     }
-
     .logo {
       font-size: 20px;
       font-weight: bold;
       text-decoration: none;
       color: white;
     }
-
     .cart-link {
       color: white;
       text-decoration: none;
     }
-
     .checkout-container {
       max-width: 600px;
       margin: 40px auto;
@@ -40,25 +36,21 @@
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
     h1 {
       margin-bottom: 20px;
       text-align: center;
     }
-
     form {
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
-
     input, textarea {
       padding: 12px;
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 6px;
     }
-
     button {
       padding: 14px;
       font-size: 16px;
@@ -68,7 +60,6 @@
       border-radius: 6px;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #1b2430;
     }
@@ -93,9 +84,9 @@
   </div>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script>
-    emailjs.init("YOUR_USER_ID"); // Replace with your actual EmailJS User ID
+    emailjs.init("cog20Tx1ONd3oFBb6"); // Your public key
 
     document.getElementById("checkoutForm").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -111,10 +102,11 @@
       ).join('\n');
 
       const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const orderId = Math.floor(Math.random() * 1000000);
 
       const options = {
         key: "rzp_test_stSgFyQjlpFMEy",
-        amount: total * 100, // in paise
+        amount: total * 100, // amount in paise
         currency: "INR",
         name: "munu",
         description: "Order Payment",
@@ -124,22 +116,23 @@
           contact: phone
         },
         handler: function (response) {
-          // Send Email
-          emailjs.send("default_service", "YOUR_TEMPLATE_ID", {
-            customer_name: name,
-            customer_email: email,
-            customer_phone: phone,
-            customer_address: address,
-            cart_details: itemDetails,
-            total_price: total,
-            payment_id: response.razorpay_payment_id,
-            admin_email: "admin@razexamhub.in"
+          // Send email via EmailJS
+          emailjs.send("service_qupgv9m", "template_t4eh97j", {
+            order_id: orderId,
+            orders: itemDetails,
+            name: name,
+            email: email,
+            units: cart.map(item => item.qty).join(', '),
+            price: total,
+            cost: total,
+            address: address,
+            phone: phone
           }).then(function () {
-            alert("✅ Payment successful. Confirmation email sent.");
+            alert("✅ Payment successful. Email sent.");
             localStorage.removeItem("cart");
             window.location.href = "index.html";
           }, function (error) {
-            alert("Payment succeeded but failed to send email: " + error.text);
+            alert("Payment successful, but email failed: " + error.text);
           });
         },
         theme: { color: "#2c3e50" }
