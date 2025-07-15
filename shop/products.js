@@ -1,24 +1,16 @@
 const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0-4wOgHqkyoqU5NV0cX9YCA7DXTF34RVy8VNrpMSWkx-jY8EzCOiphptQuamdLyOaCC8PfmtHWRCH/pub?output=csv";
 
+// Load product data with PapaParse
 async function fetchProducts() {
   const res = await fetch(sheetURL);
-  const data = await res.text();
+  const csv = await res.text();
 
-  const rows = data.trim().split('\n').slice(1); // remove header
-  const products = rows.map(row => {
-    const cols = row.split(',');
-
-    return {
-      id: cols[0],
-      name: cols[1],
-      price: cols[2],
-      description: cols[3],
-      image1: cols[4],
-      image2: cols[5],
-      image3: cols[6]
-    };
+  const parsed = Papa.parse(csv, {
+    header: true,
+    skipEmptyLines: true
   });
 
+  const products = parsed.data;
   displayProducts(products);
 }
 
@@ -30,18 +22,18 @@ function displayProducts(products) {
     card.className = "product";
 
     card.innerHTML = `
-      <img src="${product.image1}" alt="${product.name}">
+      <img src="${product.image1}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150'">
       <h2>${product.name}</h2>
       <p>₹${product.price}</p>
-      <button onclick="viewProduct('${encodeURIComponent(JSON.stringify(product))}')">View Details</button>
+      <button onclick='viewProduct(${JSON.stringify(product)})'>View Details</button>
     `;
 
     grid.appendChild(card);
   });
 }
 
-function viewProduct(productData) {
-  localStorage.setItem("selectedProduct", productData);
+function viewProduct(product) {
+  localStorage.setItem("selectedProduct", JSON.stringify(product));
   window.location.href = "product.html";
 }
 
