@@ -93,80 +93,54 @@
   </div>
 
   <!-- Razorpay & EmailJS -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    emailjs.init("cog20Tx1ONd3oFBb6"); // ✅ Replace with your EmailJS public key
+  document.getElementById("checkoutForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-    document.getElementById("checkoutForm").addEventListener("submit", function (e) {
-      e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const address = document.getElementById("address").value.trim();
 
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      if (cart.length === 0) {
-        alert("Your cart is empty.");
-        return;
-      }
+    const amount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    if (amount === 0) return alert("Cart is empty!");
 
-      const shippingCharge = 40;
-      const subtotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.qty), 0);
-     const taxAmount = 0;
-const totalAmount = subtotal + shippingCharge;
-
-      const orderId = "ORD" + Math.floor(Math.random() * 1000000);
-
-      const orders = cart.map(item => ({
-        name: item.name,
-        units: item.qty,
-        price: parseFloat(item.price) * item.qty,
-        image_url: item.image || "https://via.placeholder.com/80"
-      }));
-
-      const rzp = new Razorpay({
-        key: "rzp_test_stSgFyQjlpFMEy", // ✅ Replace with your Razorpay key
-        amount: totalAmount * 100,
-        currency: "INR",
-        name: "munu",
-        description: "Order Payment",
-        prefill: {
-          name,
-          email,
-          contact: phone
-        },
-        theme: { color: "#2c3e50" },
-        handler: function (response) {
-          const paymentId = response.razorpay_payment_id || "N/A";
-
-          emailjs.send("service_qupgv9m", "template_t4eh97j", {
-            order_id: orderId,
-            orders: JSON.stringify(orders), // if using array
-            name,
-            email,
-            address,
-            phone,
-            payment_id: paymentId,
-            cost: {
-  total: totalAmount,
-  shipping: shippingCharge
-}
-
-          }).then(() => {
-            alert("✅ Payment successful. Confirmation email sent.");
-            localStorage.removeItem("cart");
-            window.location.href = "index.html";
-          }, (error) => {
-            alert("Payment successful, but email failed: " + error.text);
-          });
-        }
-      });
-
-      rzp.open();
+    // ✅ Call your backend to create Razorpay order
+    const orderRes = await fetch("http://localhost:5000/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount })
     });
-  </script>
+
+    const { order } = await orderRes.json();
+
+    const options = {
+      key: "rzp_test_stSgFyQjlpFMEy", // Use your actual Razorpay key
+      amount: order.amount,
+      currency: order.currency,
+      name: "munu Store",
+      description: "Order Payment",
+      order_id: order.id,
+      prefill: {
+        name,
+        email,
+        contact: phone
+      },
+      handler: function (response) {
+        alert("✅ Payment successful: " + response.razorpay_payment_id);
+        localStorage.removeItem("cart");
+        window.location.href = "index.html";
+      },
+      theme: { color: "#232f3e" }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+  });
+</script>
+
 
 </body>
 </html>
