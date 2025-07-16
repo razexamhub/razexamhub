@@ -108,7 +108,8 @@
     if (amount === 0) return alert("Cart is empty!");
 
     // ✅ Call your backend to create Razorpay order
-    const orderRes = await fetch("http://localhost:5000/create-order", {
+    const orderRes = await fetch("https://razorpay-integration-ud5e.onrender.com/create-order", {
+
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount })
