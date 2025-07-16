@@ -92,56 +92,55 @@
     </form>
   </div>
 
-  <!-- Razorpay & EmailJS -->
+  <!-- ✅ Razorpay Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   <script>
-  document.getElementById("checkoutForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
+    document.getElementById("checkoutForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const address = document.getElementById("address").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
 
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const amount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      if (amount === 0) return alert("Cart is empty!");
 
-    const amount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-    if (amount === 0) return alert("Cart is empty!");
+      // ✅ Call your backend API to create an order
+      const orderRes = await fetch("https://razorpay-integration-ud5e.onrender.com/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount })
+      });
 
-    // ✅ Call your backend to create Razorpay order
-    const orderRes = await fetch("https://razorpay-integration-ud5e.onrender.com/create-order", {
+      const { order } = await orderRes.json();
 
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount })
+      const options = {
+        key: "rzp_test_stSgFyQjlpFMEy", // Replace with your Razorpay Key
+        amount: order.amount,
+        currency: order.currency,
+        name: "munu Store",
+        description: "Order Payment",
+        order_id: order.id,
+        prefill: {
+          name,
+          email,
+          contact: phone
+        },
+        handler: function (response) {
+          alert("✅ Payment successful: " + response.razorpay_payment_id);
+          localStorage.removeItem("cart");
+          window.location.href = "index.html";
+        },
+        theme: { color: "#232f3e" }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
     });
-
-    const { order } = await orderRes.json();
-
-    const options = {
-      key: "rzp_test_stSgFyQjlpFMEy", // Use your actual Razorpay key
-      amount: order.amount,
-      currency: order.currency,
-      name: "munu Store",
-      description: "Order Payment",
-      order_id: order.id,
-      prefill: {
-        name,
-        email,
-        contact: phone
-      },
-      handler: function (response) {
-        alert("✅ Payment successful: " + response.razorpay_payment_id);
-        localStorage.removeItem("cart");
-        window.location.href = "index.html";
-      },
-      theme: { color: "#232f3e" }
-    };
-
-    const rzp = new Razorpay(options);
-    rzp.open();
-  });
-</script>
-
+  </script>
 
 </body>
 </html>
