@@ -97,7 +97,7 @@
           </tr>
         </tbody></table>
         <div style="text-align:center; margin-top: 20px;">
-          <a href="checkout.html"><button>Proceed to Checkout</button></a>
+          <button onclick="placeOrder()">✅ Place Order</button>
         </div>
       `;
 
@@ -108,6 +108,45 @@
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       cart.splice(index, 1);
       localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    function sendOrderToVendor(order) {
+      fetch("https://script.google.com/macros/s/AKfycbxoh6DGalNlrZoiLYU-VMRBuxDILSmgQihO79hBpLI_5vLrZ1XaFxeFmLZn3Zoj0Ujf/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          customerName: order.customerName || "Guest",
+          productName: order.name,
+          qty: order.qty,
+          price: order.price,
+          total: order.qty * order.price,
+          vendorEmail: "vendor@example.com" // Replace with real email if needed
+        })
+      })
+      .then(res => res.text())
+      .then(msg => console.log("✅ Order sent to vendor:", msg))
+      .catch(err => console.error("❌ Vendor order failed:", err));
+    }
+
+    function placeOrder() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.length === 0) {
+        alert("Cart is empty!");
+        return;
+      }
+
+      cart.forEach(item => {
+        sendOrderToVendor({
+          ...item,
+          customerName: "Raz" // Optional: Make dynamic in future
+        });
+      });
+
+      localStorage.removeItem("cart");
+      alert("✅ Order placed successfully!");
       loadCart();
     }
 
