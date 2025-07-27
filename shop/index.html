@@ -31,15 +31,23 @@
       const rows = data.trim().split('\n').slice(1); // Skip headers
       const products = rows.map(row => {
         const cols = row.split(',');
-        return {
+
+        // Create a product object with dynamic images
+        const product = {
           id: cols[0],
           name: cols[1],
           price: cols[2],
           description: cols[3],
-          image1: cols[4],
-          image2: cols[5],
-          image3: cols[6]
+          images: []
         };
+
+        // Collect all image columns dynamically (image1, image2, ..., image10+)
+        for (let i = 4; i < cols.length; i++) {
+          const img = cols[i].trim();
+          if (img) product.images.push(img);
+        }
+
+        return product;
       });
 
       displayProducts(products);
@@ -54,7 +62,7 @@
         card.className = "product";
         card.innerHTML = `
           <a href="product.html" onclick='viewProduct(${JSON.stringify(product)})'>
-            <img src="${product.image1}" alt="${product.name}">
+            <img src="${product.images[0] || ''}" alt="${product.name}">
             <h2>${product.name}</h2>
           </a>
           <p>₹${product.price}</p>
