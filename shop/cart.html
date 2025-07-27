@@ -1,194 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Cart - munu Store</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    table {
-      width: 90%;
-      margin: auto;
-      border-collapse: collapse;
+<!-- ...head section remains same... -->
+<main>
+  <h2 style="text-align:center; margin: 20px 0;">Your Shopping Cart</h2>
+  <div id="cart-container"></div>
+  <div style="text-align:center; margin-top: 20px;">
+    <a href="checkout.html"><button>Proceed to Checkout</button></a>
+  </div>
+  <div id="success-message" class="success-message"></div>
+</main>
+
+<script>
+  function loadCart() {
+    const cartContainer = document.getElementById("cart-container");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    if (cart.length === 0) {
+      cartContainer.innerHTML = "<p style='text-align:center;'>Your cart is empty.</p>";
+      document.querySelector("a[href='checkout.html']").style.display = "none";
+      return;
     }
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #ccc;
-    }
-    td img {
-      height: 50px;
-      border-radius: 6px;
-    }
-    button {
-      padding: 8px 16px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    .remove-btn {
-      background-color: #d9534f;
-    }
-    .remove-btn:hover {
-      background-color: #c9302c;
-    }
-    .success-message {
-      text-align: center;
-      color: green;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-  </style>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-</head>
-<body>
 
-  <header class="navbar">
-    <div class="logo">🛍️ munu Store</div>
-    <a href="index.html" class="cart-link">⬅️ Continue Shopping</a>
-  </header>
-
-  <main>
-    <h2 style="text-align:center; margin: 20px 0;">Your Shopping Cart</h2>
-    <div id="cart-container"></div>
-    <div id="success-message" class="success-message"></div>
-  </main>
-
-  <script>
-    const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxoh6DGalNlrZoiLYU-VMRBuxDILSmgQihO79hBpLI_5vLrZ1XaFxeFmLZn3Zoj0Ujf/exec";
-
-    function loadCart() {
-      const cartContainer = document.getElementById("cart-container");
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-      if (cart.length === 0) {
-        cartContainer.innerHTML = "<p style='text-align:center;'>Your cart is empty.</p>";
-        return;
-      }
-
-      let table = `
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Qty</th>
-              <th>Total</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      let grandTotal = 0;
-
-      cart.forEach((item, index) => {
-        const itemTotal = item.price * item.qty;
-        grandTotal += itemTotal;
-
-        table += `
+    let table = `
+      <table>
+        <thead>
           <tr>
-            <td>
-              <img src="${item.image}" alt="${item.name}" />
-              <div>${item.name}</div>
-            </td>
-            <td>₹${item.price}</td>
-            <td>${item.qty}</td>
-            <td>₹${itemTotal}</td>
-            <td><button class="remove-btn" onclick="removeItem(${index})">Remove</button></td>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Remove</th>
           </tr>
-        `;
-      });
+        </thead>
+        <tbody>
+    `;
+
+    let grandTotal = 0;
+
+    cart.forEach((item, index) => {
+      const itemTotal = item.price * item.qty;
+      grandTotal += itemTotal;
 
       table += `
-          <tr>
-            <td colspan="3" style="text-align:right;"><strong>Grand Total:</strong></td>
-            <td><strong>₹${grandTotal}</strong></td>
-            <td></td>
-          </tr>
-        </tbody></table>
-        <div style="text-align:center; margin-top: 20px;">
-          <button onclick="payNow(${grandTotal})">Pay with Razorpay</button>
-        </div>
+        <tr>
+          <td>
+            <img src="${item.image}" alt="${item.name}" />
+            <div>${item.name}</div>
+          </td>
+          <td>₹${item.price}</td>
+          <td>${item.qty}</td>
+          <td>₹${itemTotal}</td>
+          <td><button class="remove-btn" onclick="removeItem(${index})">Remove</button></td>
+        </tr>
       `;
+    });
 
-      cartContainer.innerHTML = table;
-    }
+    table += `
+        <tr>
+          <td colspan="3" style="text-align:right;"><strong>Grand Total:</strong></td>
+          <td><strong>₹${grandTotal}</strong></td>
+          <td></td>
+        </tr>
+      </tbody></table>
+    `;
 
-    function removeItem(index) {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      loadCart();
-    }
+    cartContainer.innerHTML = table;
+  }
 
-    function payNow(amount) {
-      const options = {
-        key: "rzp_live_kwYFEvZVQbSwFM", // Replace with your actual key
-        amount: amount * 100,
-        currency: "INR",
-        name: "munu Store",
-        description: "Order Payment",
-        handler: function (response) {
-          // After successful payment
-          sendOrderToGoogleSheet(response.razorpay_payment_id);
-        },
-        prefill: {
-          name: "",
-          email: "",
-          contact: ""
-        },
-        theme: {
-          color: "#3399cc"
-        }
-      };
+  function removeItem(index) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    loadCart();
+  }
 
-      const rzp = new Razorpay(options);
-      rzp.open();
-    }
-
-    function sendOrderToGoogleSheet(paymentId) {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-      const orderData = {
-        payment_id: paymentId,
-        timestamp: new Date().toLocaleString(),
-        items: cart.map(item => ({
-          name: item.name,
-          qty: item.qty,
-          price: item.price,
-          total: item.qty * item.price
-        })),
-        total_amount: cart.reduce((sum, item) => sum + (item.qty * item.price), 0)
-      };
-
-      fetch(GOOGLE_SHEET_WEBAPP_URL, {
-        method: "POST",
-        body: JSON.stringify(orderData),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.text())
-      .then(data => {
-        localStorage.removeItem("cart");
-        document.getElementById("cart-container").innerHTML = "";
-        document.getElementById("success-message").innerText = "✅ Order placed and payment successful!";
-      })
-      .catch(err => {
-        alert("Something went wrong. Order not sent to vendor.");
-        console.error(err);
-      });
-    }
-
-    window.onload = loadCart;
-  </script>
-
-</body>
-</html>
+  window.onload = loadCart;
+</script>
