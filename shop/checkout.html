@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Checkout - munu Store</title>
   <style>
     body {
@@ -55,7 +55,8 @@
   </div>
 
   <script>
-    const backendURL = "https://razorpay-integration-ud5e.onrender.com"; // ✅ Your backend URL
+    const backendURL = "https://razorpay-integration-ud5e.onrender.com"; // ✅ Your backend
+    const sheetURL = "https://script.google.com/macros/s/AKfycbxoh6DGalNlrZoiLYU-VMRBuxDILSmgQihO79hBpLI_5vLrZ1XaFxeFmLZn3Zoj0Ujf/exec"; // ✅ Your Google Sheet Web App URL
 
     function payNow() {
       const name = document.getElementById("name").value.trim();
@@ -81,37 +82,66 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: totalAmount }),
       })
-        .then(res => res.json())
-        .then(data => {
-          const options = {
-            key: "rzp_live_kwYFEvZVQbSwFM", // ✅ Your RAZORPAY_KEY_ID here
-            amount: data.order.amount,
-            currency: "INR",
-            name: "munu Store",
-            description: "Test Transaction",
-            order_id: data.order.id,
-            handler: function (response) {
-              // ✅ Order success, send to Google Sheet or show success
-              alert("Payment successful! ID: " + response.razorpay_payment_id);
-              localStorage.removeItem("cart");
-              window.location.href = "success.html";
-            },
-            prefill: {
-              name: name,
-              email: email,
-              contact: contact
-            },
-            theme: {
-              color: "#3399cc"
-            }
-          };
-          const rzp = new Razorpay(options);
-          rzp.open();
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Something went wrong.");
-        });
+      .then(res => res.json())
+      .then(data => {
+        const options = {
+          key: "rzp_live_kwYFEvZVQbSwFM", // ✅ Replace with your Razorpay Key ID
+          amount: data.order.amount,
+          currency: "INR",
+          name: "munu Store",
+          description: "Order Payment",
+          order_id: data.order.id,
+          handler: function (response) {
+            sendOrderToGoogleSheet(
+              response.razorpay_payment_id,
+              name,
+              address,
+              email,
+              contact,
+              cart,
+              totalAmount
+            );
+          },
+          prefill: { name, email, contact },
+          theme: { color: "#3399cc" }
+        };
+        const rzp = new Razorpay(options);
+        rzp.open();
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Something went wrong while creating order.");
+      });
+    }
+
+    function sendOrderToGoogleSheet(paymentId, name, address, email, contact, cart, total) {
+      const orderData = {
+        payment_id: paymentId,
+        customer_name: name,
+        customer_address: address,
+        customer_email: email,
+        customer_contact: contact,
+        total_amount: total,
+        items: cart
+      };
+
+      fetch(sheetURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(orderData)
+      })
+      .then(res => res.text())
+      .then(data => {
+        localStorage.removeItem("cart");
+        alert("✅ Payment successful and order placed!");
+        window.location.href = "success.html"; // or index.html
+      })
+      .catch(err => {
+        console.error("Order not saved:", err);
+        alert("❌ Payment succeeded but order failed to record.");
+      });
     }
   </script>
 
