@@ -54,12 +54,20 @@
     if (!product || !product.name) {
       container.innerHTML = '<div class="error">❌ Product details not found.</div>';
     } else {
+      // Build gallery HTML from dynamic images
+      let galleryHTML = '';
+      if (Array.isArray(product.images)) {
+        product.images.forEach(url => {
+          if (url && url.trim()) {
+            galleryHTML += `<img src="${url}" alt="${product.name}" />`;
+          }
+        });
+      }
+
       container.innerHTML = `
         <div class="product-detail">
           <div class="product-gallery">
-            <img src="${product.image1}" alt="${product.name} Image 1">
-            <img src="${product.image2}" alt="${product.name} Image 2">
-            <img src="${product.image3}" alt="${product.name} Image 3">
+            ${galleryHTML}
           </div>
           <h1>${product.name}</h1>
           <p><strong>Price:</strong> ₹${product.price}</p>
@@ -97,7 +105,7 @@
             name: product.name,
             price: price,
             qty: qty,
-            image: product.image1 // ✅ image added here for cart/checkout
+            image: (product.images && product.images[0]) || "" // fallback to first image
           });
         }
 
