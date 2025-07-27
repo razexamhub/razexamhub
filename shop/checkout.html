@@ -108,38 +108,46 @@
       const amount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
       if (amount === 0) return alert("Cart is empty!");
 
-      // ✅ Call your backend API to create an order
-      const orderRes = await fetch("https://razorpay-integration-ud5e.onrender.com/create-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount })
-      });
+      try {
+        const orderRes = await fetch("https://razorpay-integration-ud5e.onrender.com/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount })
+        });
 
-      const { order } = await orderRes.json();
+        if (!orderRes.ok) throw new Error("Failed to create order");
 
-      const options = {
-       key: "rzp_live_J2n2ddFybUNPT8",  // ✅ NEW LIVE KEY
+        const data = await orderRes.json();
+        console.log("Order response:", data);
 
-        amount: order.amount,
-        currency: order.currency,
-        name: "munu Store",
-        description: "Order Payment",
-        order_id: order.id,
-        prefill: {
-          name,
-          email,
-          contact: phone
-        },
-        handler: function (response) {
-          alert("✅ Payment successful: " + response.razorpay_payment_id);
-          localStorage.removeItem("cart");
-          window.location.href = "index.html";
-        },
-        theme: { color: "#232f3e" }
-      };
+        if (!data.order || !data.order.id) throw new Error("Invalid order object from backend");
 
-      const rzp = new Razorpay(options);
-      rzp.open();
+        const options = {
+          key: "rzp_live_J2n2ddFybUNPT8", // ✅ LIVE KEY
+          amount: data.order.amount,
+          currency: data.order.currency,
+          name: "munu Store",
+          description: "Order Payment",
+          order_id: data.order.id,
+          prefill: {
+            name,
+            email,
+            contact: phone
+          },
+          handler: function (response) {
+            alert("✅ Payment successful: " + response.razorpay_payment_id);
+            localStorage.removeItem("cart");
+            window.location.href = "index.html";
+          },
+          theme: { color: "#232f3e" }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (err) {
+        console.error("Razorpay Error:", err.message);
+        alert("Something went wrong: " + err.message);
+      }
     });
   </script>
 
