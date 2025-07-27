@@ -8,14 +8,20 @@ async function fetchProducts() {
   const products = rows.map(row => {
     const cols = row.split(',');
 
+    // Read up to 10 image columns dynamically
+    const images = [];
+    for (let i = 4; i < cols.length && i < 14; i++) {
+      if (cols[i] && cols[i].trim() !== "") {
+        images.push(cols[i].trim());
+      }
+    }
+
     return {
       id: cols[0],
       name: cols[1],
       price: cols[2],
       description: cols[3],
-      image1: cols[4],
-      image2: cols[5],
-      image3: cols[6]
+      images: images
     };
   });
 
@@ -29,8 +35,10 @@ function displayProducts(products) {
     const card = document.createElement("div");
     card.className = "product";
 
+    const firstImage = product.images[0] || ""; // Fallback empty if no image
+
     card.innerHTML = `
-      <img src="${product.image1}" alt="${product.name}">
+      <img src="${firstImage}" alt="${product.name}">
       <h2>${product.name}</h2>
       <p>₹${product.price}</p>
       <button onclick="viewProduct('${encodeURIComponent(JSON.stringify(product))}')">View Details</button>
