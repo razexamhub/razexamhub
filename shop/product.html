@@ -31,10 +31,25 @@
       gap: 10px;
       align-items: center;
     }
+    .quantity-select input {
+      width: 60px;
+      padding: 5px;
+    }
     .error {
       color: red;
       text-align: center;
       margin-top: 50px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
     }
   </style>
 </head>
@@ -54,18 +69,15 @@
     if (!product || !product.name) {
       container.innerHTML = '<div class="error">❌ Product details not found.</div>';
     } else {
-      // Build gallery HTML
-      const galleryHTML = Array.isArray(product.images)
-        ? product.images
-            .filter(url => url && url.trim())
-            .map(url => `<img src="${url}" alt="${product.name}">`)
-            .join('')
-        : '';
+      const galleryHTML = (product.images || [])
+        .filter(url => url.trim() !== "")
+        .map(url => `<img src="${url}" alt="${product.name}">`)
+        .join('');
 
       container.innerHTML = `
         <div class="product-detail">
           <div class="product-gallery">
-            ${galleryHTML}
+            ${galleryHTML || '<p>No images available</p>'}
           </div>
           <h1>${product.name}</h1>
           <p><strong>Price:</strong> ₹${product.price}</p>
@@ -87,13 +99,13 @@
 
       qtyInput.addEventListener("input", () => {
         const qty = parseInt(qtyInput.value) || 1;
-        totalDisplay.textContent = "Total: ₹" + (qty * price);
+        totalDisplay.textContent = "Total: ₹" + (qty * price).toFixed(2);
       });
 
       window.addToCart = function () {
         const qty = parseInt(qtyInput.value) || 1;
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const existing = cart.find(item => item.name === product.name);
+        const existing = cart.find(item => item.id === product.id);
 
         if (existing) {
           existing.qty += qty;
