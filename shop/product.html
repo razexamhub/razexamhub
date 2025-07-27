@@ -54,15 +54,13 @@
     if (!product || !product.name) {
       container.innerHTML = '<div class="error">❌ Product details not found.</div>';
     } else {
-      // Build gallery HTML from dynamic images
-      let galleryHTML = '';
-      if (Array.isArray(product.images)) {
-        product.images.forEach(url => {
-          if (url && url.trim()) {
-            galleryHTML += `<img src="${url}" alt="${product.name}" />`;
-          }
-        });
-      }
+      // Build gallery HTML
+      const galleryHTML = Array.isArray(product.images)
+        ? product.images
+            .filter(url => url && url.trim())
+            .map(url => `<img src="${url}" alt="${product.name}">`)
+            .join('')
+        : '';
 
       container.innerHTML = `
         <div class="product-detail">
@@ -105,7 +103,7 @@
             name: product.name,
             price: price,
             qty: qty,
-            image: (product.images && product.images[0]) || "" // fallback to first image
+            image: (product.images && product.images[0]) || ""
           });
         }
 
