@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Cart - munu Store</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     body {
       font-family: sans-serif;
@@ -81,7 +80,7 @@
       display: block;
       padding: 10px 20px;
       font-size: 16px;
-      background-color: #28a745;
+      background-color: #007bff;
       color: white;
       border: none;
       border-radius: 4px;
@@ -89,7 +88,7 @@
     }
 
     .pay-btn:hover {
-      background-color: #218838;
+      background-color: #0056b3;
     }
 
     .success-message {
@@ -112,8 +111,6 @@
   <div id="success-message" class="success-message"></div>
 
   <script>
-    const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxoh6DGalNlrZoiLYU-VMRBuxDILSmgQihO79hBpLI_5vLrZ1XaFxeFmLZn3Zoj0Ujf/exec";
-
     function loadCart() {
       const cartContainer = document.getElementById("cart-container");
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -164,7 +161,7 @@
             <td></td>
           </tr>
         </tbody></table>
-        <button class="pay-btn" onclick="payNow(${grandTotal})">Pay with Razorpay</button>
+        <button class="pay-btn" onclick="goToCheckout()">Proceed to Checkout</button>
       `;
 
       cartContainer.innerHTML = table;
@@ -177,57 +174,8 @@
       loadCart();
     }
 
-    function payNow(amount) {
-      const options = {
-        key: "rzp_live_kwYFEvZVQbSwFM", // replace with your live/test key
-        amount: amount * 100,
-        currency: "INR",
-        name: "munu Store",
-        description: "Order Payment",
-        handler: function (response) {
-          sendOrderToGoogleSheet(response.razorpay_payment_id);
-        },
-        theme: {
-          color: "#3399cc"
-        }
-      };
-
-      const rzp = new Razorpay(options);
-      rzp.open();
-    }
-
-    function sendOrderToGoogleSheet(paymentId) {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-      const orderData = {
-        payment_id: paymentId,
-        timestamp: new Date().toLocaleString(),
-        items: cart.map(item => ({
-          name: item.name,
-          qty: item.qty,
-          price: item.price,
-          total: item.qty * item.price
-        })),
-        total_amount: cart.reduce((sum, item) => sum + (item.qty * item.price), 0)
-      };
-
-      fetch(GOOGLE_SHEET_WEBAPP_URL, {
-        method: "POST",
-        body: JSON.stringify(orderData),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(res => res.text())
-      .then(data => {
-        localStorage.removeItem("cart");
-        document.getElementById("cart-container").innerHTML = "";
-        document.getElementById("success-message").innerText = "✅ Order placed and payment successful!";
-      })
-      .catch(err => {
-        alert("❌ Something went wrong. Order not saved.");
-        console.error(err);
-      });
+    function goToCheckout() {
+      window.location.href = "checkout.html";
     }
 
     window.onload = loadCart;
