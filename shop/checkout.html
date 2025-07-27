@@ -1,154 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Checkout - munu</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Checkout - munu Store</title>
   <style>
     body {
-      background-color: #f4f4f4;
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #f0f0f0;
     }
 
-    .navbar {
-      display: flex;
-      align-items: center;
-      background-color: #232f3e;
-      color: white;
-      padding: 12px 20px;
-      justify-content: space-between;
-    }
-
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      text-decoration: none;
-      color: white;
-    }
-
-    .cart-link {
-      color: white;
-      text-decoration: none;
-    }
-
-    .checkout-container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      margin-bottom: 20px;
+    h2 {
       text-align: center;
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+    .form-container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
     }
 
-    input, textarea {
-      padding: 12px;
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
       font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
     }
 
     button {
-      padding: 14px;
-      font-size: 16px;
-      background-color: #232f3e;
+      background-color: #007bff;
       color: white;
       border: none;
-      border-radius: 6px;
       cursor: pointer;
     }
 
     button:hover {
-      background-color: #1b2430;
+      background-color: #0056b3;
     }
   </style>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
-  <header class="navbar">
-    <a href="index.html" class="logo">🛍️ munu</a>
-    <a href="cart.html" class="cart-link">🛒 View Cart</a>
-  </header>
+  <h2>Checkout</h2>
 
-  <div class="checkout-container">
-    <h1>Checkout</h1>
-    <form id="checkoutForm">
-      <input type="text" id="name" placeholder="Full Name" required />
-      <input type="tel" id="phone" placeholder="Phone Number" required pattern="[0-9]{10}" />
-      <input type="email" id="email" placeholder="Email" required />
-      <textarea id="address" placeholder="Address" required></textarea>
-      <button type="submit">Pay with Razorpay</button>
-    </form>
+  <div class="form-container">
+    <input type="text" id="name" placeholder="Your Name" required />
+    <input type="text" id="address" placeholder="Your Address" required />
+    <input type="email" id="email" placeholder="Your Email" required />
+    <input type="tel" id="contact" placeholder="Phone Number" required />
+    <button onclick="payNow()">Pay with Razorpay</button>
   </div>
 
-  <!-- ✅ Razorpay Script -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
   <script>
-    document.getElementById("checkoutForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
+    const backendURL = "https://razorpay-integration-ud5e.onrender.com"; // ✅ Your backend URL
 
+    function payNow() {
       const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const email = document.getElementById("email").value.trim();
       const address = document.getElementById("address").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const contact = document.getElementById("contact").value.trim();
+
+      if (!name || !address || !email || !contact) {
+        alert("Please fill in all the details.");
+        return;
+      }
 
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const amount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-      if (amount === 0) return alert("Cart is empty!");
-
-      try {
-        const orderRes = await fetch("https://razorpay-integration-ud5e.onrender.com/create-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount })
-        });
-
-        if (!orderRes.ok) throw new Error("Failed to create order");
-
-        const data = await orderRes.json();
-        console.log("Order response:", data);
-
-        if (!data.order || !data.order.id) throw new Error("Invalid order object from backend");
-
-        const options = {
-          key: "rzp_live_iBGD5jCpD6m7WS", // ✅ LIVE KEY
-          amount: data.order.amount,
-          currency: data.order.currency,
-          name: "munu Store",
-          description: "Order Payment",
-          order_id: data.order.id,
-          prefill: {
-            name,
-            email,
-            contact: phone
-          },
-          handler: function (response) {
-            alert("✅ Payment successful: " + response.razorpay_payment_id);
-            localStorage.removeItem("cart");
-            window.location.href = "index.html";
-          },
-          theme: { color: "#232f3e" }
-        };
-
-        const rzp = new Razorpay(options);
-        rzp.open();
-      } catch (err) {
-        console.error("Razorpay Error:", err.message);
-        alert("Something went wrong: " + err.message);
+      if (cart.length === 0) {
+        alert("Cart is empty.");
+        return;
       }
-    });
+
+      const totalAmount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+      fetch(`${backendURL}/create-order`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: totalAmount }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          const options = {
+            key: "rzp_live_kwYFEvZVQbSwFM", // ✅ Your RAZORPAY_KEY_ID here
+            amount: data.order.amount,
+            currency: "INR",
+            name: "munu Store",
+            description: "Test Transaction",
+            order_id: data.order.id,
+            handler: function (response) {
+              // ✅ Order success, send to Google Sheet or show success
+              alert("Payment successful! ID: " + response.razorpay_payment_id);
+              localStorage.removeItem("cart");
+              window.location.href = "success.html";
+            },
+            prefill: {
+              name: name,
+              email: email,
+              contact: contact
+            },
+            theme: {
+              color: "#3399cc"
+            }
+          };
+          const rzp = new Razorpay(options);
+          rzp.open();
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Something went wrong.");
+        });
+    }
   </script>
 
 </body>
