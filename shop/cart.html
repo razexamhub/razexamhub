@@ -5,106 +5,93 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Cart - munu Store</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: sans-serif;
+      background: #f5f5f5;
       margin: 0;
       padding: 0;
-      background-color: #f4f6f8;
     }
+
     .navbar {
-      background-color: #0d6efd;
+      background-color: #333;
+      padding: 10px 20px;
       color: white;
-      padding: 15px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .logo {
       font-size: 20px;
       font-weight: bold;
     }
+
     .cart-link {
       color: white;
       text-decoration: none;
-      font-weight: 500;
+      font-size: 16px;
     }
+
     h2 {
       text-align: center;
       margin: 20px 0;
-      color: #333;
     }
-    #cart-container {
-      max-width: 900px;
-      margin: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .cart-card {
+
+    table {
+      width: 90%;
+      margin: 0 auto;
+      border-collapse: collapse;
       background-color: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    .cart-card img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
       border-radius: 8px;
-      margin-right: 15px;
+      overflow: hidden;
     }
-    .cart-details {
-      flex: 1;
-      display: flex;
-      align-items: center;
-    }
-    .cart-details div {
-      margin-right: 20px;
-    }
-    .remove-btn {
-      background-color: #dc3545;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .remove-btn:hover {
-      background-color: #b02a37;
-    }
-    .total-row {
-      text-align: right;
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    .checkout-btn {
-      display: block;
-      margin: 25px auto 40px;
-      background-color: #198754;
-      color: white;
-      padding: 12px 30px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .checkout-btn:hover {
-      background-color: #157347;
-    }
-    .empty-message {
+
+    th, td {
+      padding: 12px;
       text-align: center;
-      font-size: 20px;
-      margin: 40px 0;
-      color: #666;
+      border-bottom: 1px solid #ddd;
     }
+
+    th {
+      background-color: #eee;
+    }
+
+    td img {
+      height: 50px;
+      border-radius: 6px;
+    }
+
+    .remove-btn {
+      padding: 6px 10px;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .remove-btn:hover {
+      background-color: #c9302c;
+    }
+
+    .pay-btn {
+      margin: 20px auto;
+      display: block;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .pay-btn:hover {
+      background-color: #218838;
+    }
+
     .success-message {
       text-align: center;
       color: green;
@@ -120,11 +107,9 @@
     <a href="index.html" class="cart-link">⬅️ Continue Shopping</a>
   </header>
 
-  <main>
-    <h2>Your Shopping Cart</h2>
-    <div id="cart-container"></div>
-    <div id="success-message" class="success-message"></div>
-  </main>
+  <h2>Your Shopping Cart</h2>
+  <div id="cart-container"></div>
+  <div id="success-message" class="success-message"></div>
 
   <script>
     const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxoh6DGalNlrZoiLYU-VMRBuxDILSmgQihO79hBpLI_5vLrZ1XaFxeFmLZn3Zoj0Ujf/exec";
@@ -134,43 +119,55 @@
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
       if (cart.length === 0) {
-        cartContainer.innerHTML = "<div class='empty-message'>🛒 Your cart is empty!</div>";
+        cartContainer.innerHTML = "<p style='text-align:center;'>Your cart is empty.</p>";
         return;
       }
 
+      let table = `
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Total</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
       let grandTotal = 0;
-      cartContainer.innerHTML = "";
 
       cart.forEach((item, index) => {
         const itemTotal = item.price * item.qty;
         grandTotal += itemTotal;
 
-        const card = document.createElement("div");
-        card.className = "cart-card";
-
-        card.innerHTML = `
-          <div class="cart-details">
-            <img src="${item.image}" alt="${item.name}" />
-            <div><strong>${item.name}</strong></div>
-            <div>₹${item.price} x ${item.qty}</div>
-            <div>Total: ₹${itemTotal}</div>
-          </div>
-          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        table += `
+          <tr>
+            <td>
+              <img src="${item.image}" alt="${item.name}" />
+              <div>${item.name}</div>
+            </td>
+            <td>₹${item.price}</td>
+            <td>${item.qty}</td>
+            <td>₹${itemTotal}</td>
+            <td><button class="remove-btn" onclick="removeItem(${index})">Remove</button></td>
+          </tr>
         `;
-
-        cartContainer.appendChild(card);
       });
 
-      const totalRow = document.createElement("div");
-      totalRow.className = "total-row";
-      totalRow.innerHTML = `Grand Total: ₹${grandTotal}`;
-      cartContainer.appendChild(totalRow);
+      table += `
+          <tr>
+            <td colspan="3" style="text-align:right;"><strong>Grand Total:</strong></td>
+            <td><strong>₹${grandTotal}</strong></td>
+            <td></td>
+          </tr>
+        </tbody></table>
+        <button class="pay-btn" onclick="payNow(${grandTotal})">Pay with Razorpay</button>
+      `;
 
-      const payBtn = document.createElement("button");
-      payBtn.className = "checkout-btn";
-      payBtn.textContent = "Pay with Razorpay";
-      payBtn.onclick = () => payNow(grandTotal);
-      cartContainer.appendChild(payBtn);
+      cartContainer.innerHTML = table;
     }
 
     function removeItem(index) {
@@ -182,7 +179,7 @@
 
     function payNow(amount) {
       const options = {
-        key: "rzp_live_kwYFEvZVQbSwFM", // Your live Razorpay key
+        key: "rzp_live_kwYFEvZVQbSwFM", // replace with your live/test key
         amount: amount * 100,
         currency: "INR",
         name: "munu Store",
@@ -190,13 +187,8 @@
         handler: function (response) {
           sendOrderToGoogleSheet(response.razorpay_payment_id);
         },
-        prefill: {
-          name: "",
-          email: "",
-          contact: ""
-        },
         theme: {
-          color: "#0d6efd"
+          color: "#3399cc"
         }
       };
 
@@ -233,7 +225,7 @@
         document.getElementById("success-message").innerText = "✅ Order placed and payment successful!";
       })
       .catch(err => {
-        alert("❌ Something went wrong. Order not sent to vendor.");
+        alert("❌ Something went wrong. Order not saved.");
         console.error(err);
       });
     }
