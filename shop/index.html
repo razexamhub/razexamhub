@@ -32,7 +32,6 @@
       const products = rows.map(row => {
         const cols = row.split(',');
 
-        // Create a product object with dynamic images
         const product = {
           id: cols[0],
           name: cols[1],
@@ -41,7 +40,6 @@
           images: []
         };
 
-        // Collect all image columns dynamically (image1, image2, ..., image10+)
         for (let i = 4; i < cols.length; i++) {
           const img = cols[i].trim();
           if (img) product.images.push(img);
@@ -55,7 +53,7 @@
 
     function displayProducts(products) {
       const grid = document.getElementById("productGrid");
-      grid.innerHTML = ""; // Clear any existing items
+      grid.innerHTML = "";
 
       products.forEach(product => {
         const card = document.createElement("div");
@@ -86,6 +84,19 @@
     }
 
     fetchProducts();
+  </script>
+
+  <!-- ✅ Tawk.to Live Chat Script -->
+  <script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/68871593f072f7192b20d9b8/1j17qoi40';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode.insertBefore(s1, s0);
+    })();
   </script>
 
 </body>
